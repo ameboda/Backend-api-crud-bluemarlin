@@ -3,7 +3,6 @@ import status from "http-status";
 import { inject } from "inversify";
 import {
     controller,
-    httpDelete,
     httpGet,
     httpPost,
     httpPut,
@@ -14,9 +13,11 @@ import {
 } from "inversify-express-utils";
 import { SaveCustomerUsecase } from "../../../domain/usecases/customer/save-customer.usecase";
 import { GetCustomerUsecase } from "../../../domain/usecases/customer/get-customer.usecase";
-// import { GetBrandsByIdUsecase } from "../../../domain/usecases/brands/get-brands-by-id.usecase";
-// import { DeleteBrandsUsecase } from "../../../domain/usecases/brands/delete-brands.usecase";
+import { GetCustomerByNameUsecase } from "../../../domain/usecases/customer/get-customer-by-name.usecase";
+import { GetCustomerByNitUsecase } from "../../../domain/usecases/customer/get-customer-by-nit.usecase";
 import { UpdateCustomerUsecase } from "../../../domain/usecases/customer/update-customer.usecase";
+
+
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
     NOTIFICATION_STATUS_200,
@@ -36,16 +37,13 @@ export class CustomerController implements interfaces.Controller {
         private saveCustomerUsecase: SaveCustomerUsecase,
         @inject("GetCustomerUsecase")
         private getCustomerUsecase: GetCustomerUsecase,
-        // @inject("GetBrandsByIdUsecase")
-        // private GetBrandsByIdUsecase: GetBrandsByIdUsecase,
-        // @inject("DeleteBrandsUsecase")
-        // private DeleteBrandsUsecase: DeleteBrandsUsecase,
+        @inject("GetCustomerByNameUsecase")
+        private getCustomerByNameUsecase: GetCustomerByNameUsecase,
+        @inject("GetCustomerByNitUsecase")
+        private getCustomerByNitUsecase: GetCustomerByNitUsecase,
         @inject("UpdateCustomerUsecase")
         private updateCustomerUsecase: UpdateCustomerUsecase,
-
     ) { }
-
-
 
     @httpPost("/")
     async saveCustomer(req: express.Request, res: express.Response) {
@@ -118,30 +116,90 @@ export class CustomerController implements interfaces.Controller {
         }
     }
 
+    @httpGet("/:name")
+    async getCustomerByName(
+        @requestParam("name") name: string,
+        @response() res: express.Response
+    ) {
+        try {
+            const getCustomerByNameUsecase = await this.getCustomerByNameUsecase.invoke(name);
+            if (getCustomerByNameUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Customer",
+                            NOTIFICATION_STATUS_404,
+                            getCustomerByNameUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Customer",
+                            NOTIFICATION_STATUS_200,
+                            getCustomerByNameUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Customer", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
+
+    @httpGet("/nit/:nit")
+    async getCustomerByNit(
+        @requestParam("nit") nit: number,
+        @response() res: express.Response
+    ) {
+        try {
+            const getCustomerByNitUsecase = await this.getCustomerByNitUsecase.invoke(nit);
+            if (getCustomerByNitUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Customer",
+                            NOTIFICATION_STATUS_404,
+                            getCustomerByNitUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Customer",
+                            NOTIFICATION_STATUS_200,
+                            getCustomerByNitUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Customer", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
 
     @httpPut("/:nit")
-    async updateBrands(
+    async updateCustomer(
         @requestParam("nit") currentNit: string,
         @request() req: express.Request,
         @response() res: express.Response
     ) {
         try {
-            // const component = await this.GetBrandsByIdUsecase.invoke(id);
             const param = req.body;
             const paramsAndCurrentNit = { currentNit, ...param };
-            // if (!component.length) {
-            //     res
-            //         .status(status.OK)
-            //         .send(
-            //             NotificationEnvelope.build(
-            //                 "Brands",
-            //                 NOTIFICATION_STATUS_404,
-            //                 component.error
-            //             )
-            //         );
-            // } else {
             const respondeUpdateCustomer = await this.updateCustomerUsecase.invoke(paramsAndCurrentNit);
-
             if (respondeUpdateCustomer.error) {
                 res
                     .status(status.OK)
@@ -163,7 +221,6 @@ export class CustomerController implements interfaces.Controller {
                         )
                     );
             }
-            // }
         } catch (error) {
             res
                 .status(status.INTERNAL_SERVER_ERROR)
@@ -176,82 +233,5 @@ export class CustomerController implements interfaces.Controller {
                 );
         }
     }
-
-
-
-    // @httpGet("/:id")
-    // async getBrandsById(
-    //     @requestParam("id") id: string,
-    //     @response() res: express.Response
-    // ) {
-    //     try {
-    //         const GetBrandsByIdUsecase = await this.GetBrandsByIdUsecase.invoke(id);
-    //         if (GetBrandsByIdUsecase.error) {
-    //             res
-    //                 .status(status.OK)
-    //                 .send(
-    //                     NotificationEnvelope.build(
-    //                         "Brand",
-    //                         NOTIFICATION_STATUS_404,
-    //                         GetBrandsByIdUsecase.error
-    //                     )
-    //                 );
-    //         } else {
-    //             res
-    //                 .status(status.OK)
-    //                 .send(
-    //                     NotificationEnvelope.build(
-    //                         "Brand",
-    //                         NOTIFICATION_STATUS_200,
-    //                         GetBrandsByIdUsecase
-    //                     )
-    //                 );
-    //         }
-    //     } catch (error) {
-    //         res
-    //             .status(status.INTERNAL_SERVER_ERROR)
-    //             .send(
-    //                 NotificationEnvelope.build("Brand", NOTIFICATION_STATUS_500, error)
-    //             );
-    //     }
-    // }
-
-    // @httpDelete("/:id")
-    // async deleteBrands(
-    //     @requestParam("id") id: string,
-    //     @response() res: express.Response
-    // ) {
-    //     try {
-    //         const GetBrandsUsecase = await this.DeleteBrandsUsecase.invoke(id);
-    //         if (GetBrandsUsecase.error) {
-    //             res
-    //                 .status(status.OK)
-    //                 .send(
-    //                     NotificationEnvelope.build(
-    //                         "Brand",
-    //                         NOTIFICATION_STATUS_404,
-    //                         GetBrandsUsecase.error
-    //                     )
-    //                 );
-    //         } else {
-    //             res
-    //                 .status(status.OK)
-    //                 .send(
-    //                     NotificationEnvelope.build(
-    //                         "Brand",
-    //                         NOTIFICATION_STATUS_200,
-    //                         GetBrandsUsecase
-    //                     )
-    //                 );
-    //         }
-    //     } catch (error) {
-    //         res
-    //             .status(status.INTERNAL_SERVER_ERROR)
-    //             .send(
-    //                 NotificationEnvelope.build("Brand", NOTIFICATION_STATUS_500, error)
-    //             );
-    //     }
-    // }
-
 
 }

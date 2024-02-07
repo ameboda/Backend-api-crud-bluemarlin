@@ -3,18 +3,17 @@ import { ICustomerModel } from "../../models/customer/customer.model";
 import CustomerGateway from "../../models/customer/gateway/customer.gateway";
 
 @injectable()
-export class UpdateCustomerUsecase {
+export class GetCustomerByNameUsecase {
   constructor(
     @inject("CustomerGateway") private customerGateWay: CustomerGateway
   ) {}
-   async invoke(param: ICustomerModel): Promise<ICustomerModel> {
+   async invoke(name: string): Promise<ICustomerModel> {
     let responseCustomerUseCase:any;
-    if(!param.nit){
-        param.nit = param.currentNit
-    }
-    responseCustomerUseCase = await this.customerGateWay.updateByNit(param);
-    if(!responseCustomerUseCase.nModified){
-        responseCustomerUseCase.error = 'No se ha actualizado la  informacion del cliente';
+    responseCustomerUseCase = await this.customerGateWay.getByCustomer(name);
+    if(!responseCustomerUseCase){
+      responseCustomerUseCase = {
+        error: `No se ha encontrado registro para la empresa: ${name}`
+      }
     }
     return responseCustomerUseCase;
   }

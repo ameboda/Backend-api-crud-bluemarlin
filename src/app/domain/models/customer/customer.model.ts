@@ -1,4 +1,3 @@
-// import mongoose, { Document, model, Schema } from "mongoose";
 import { Document, model, Schema } from "mongoose";
 
 export interface ICustomerModel extends Document {
@@ -12,6 +11,7 @@ export interface ICustomerModel extends Document {
   lastnameContact:string;
   sizeNumber:boolean;
   dateCreate: Date;
+  disabled: boolean;
 }
 
 const CustomerSchema = new Schema({
@@ -50,6 +50,11 @@ const CustomerSchema = new Schema({
   },
 
   sizeNumber: {
+    type: Boolean,
+    default: false
+  },
+
+  disabled: {
     type: Boolean,
     default: false
   },

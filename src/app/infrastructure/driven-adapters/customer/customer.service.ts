@@ -52,46 +52,27 @@ export class CustomerService extends CustomerGateway {
   }
 
 
-//   async getById(id: string) {
-//     let getByIdResponseBd: any = null;
-//     try {
-//       getByIdResponseBd = await Banner.find({ _id: id });
-//     } catch (error) {
-//       getByIdResponseBd = {
-//         error: error,
-//       };
-//     }
-//     return getByIdResponseBd;
-//   }
+  async getByCustomer(name: string) {
+    let getByNameResponseBd: any = null;
+    try {
+      getByNameResponseBd = await Customer.findOne({ companyName: { $regex : new RegExp(name, "i") }});
+    } catch (error) {
+      getByNameResponseBd = {
+        error: error,
+      };
+    }
+    return getByNameResponseBd;
+  }
 
-//   async getByState(obj: IBannerModel): Promise<IBannerModel> {
-//     let getByIdResponseBd: any = null;
-//     try {
-//       getByIdResponseBd = await Banner.find({ state: obj.state });
-//     } catch (error) {
-//       getByIdResponseBd = {
-//         error: error,
-//       };
-//     }
-//     return getByIdResponseBd;
-//   }
-
-//   async updateById(obj: IBannerModel) {
-//     let updateByIdResponseBd: any = null;
-//     try {
-//       const filter = { _id: obj.id };
-//       updateByIdResponseBd = await Banner.updateOne(filter, obj);
-//     } catch (error) {
-//       updateByIdResponseBd = {
-//         error: error,
-//       };
-//     }
-
-//     return updateByIdResponseBd;
-//   }
-
-//   deleteById(id: string) {
-//     const data: any = "todo";
-//     return data;
-//   }
+  async getByNit(numberNit: number) {
+    let getByNitResponseBd: any = null;
+    try {
+      getByNitResponseBd = await Customer.findOne({ nit: numberNit });
+    } catch (error) {
+      getByNitResponseBd = {
+        error: error,
+      };
+    }
+    return getByNitResponseBd;
+  }
 }

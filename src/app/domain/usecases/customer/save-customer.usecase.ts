@@ -9,22 +9,18 @@ export class SaveCustomerUsecase {
   ) {}
    async invoke(param: ICustomerModel): Promise<ICustomerModel> {
     let responseBD: any;
-    let responseUserCase: any;
-    // let responseBrand = await this.brandsGateway.getByBrand(param.brand);
+    let responseCustomerUsecase: any;
+    // consulto que no exista ya el nit ingresado
+    let responseGetCustomer = await this.customerGateway.getByNit(param.nit);
 
-    // if(responseBrand){
-    //   responseUserCase = {
-    //     error: "ya existe esa marca"
-    //   }
-    //   return responseUserCase;
-    // }else{
-      responseBD = this.customerGateway.save(param);
-      responseUserCase = {
-        msg: "creado con exito",
+    if(responseGetCustomer){
+      responseCustomerUsecase = {
+        error: "ya existe esta empresa"
       }
+      return responseCustomerUsecase;
+    }else{
+      responseBD = this.customerGateway.save(param);
       return responseBD;
-      
-    // }
- 
+    }
   }
 }
