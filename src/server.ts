@@ -12,9 +12,6 @@ const server = new InversifyExpressServer(container);
 
 
 const allowedOrigins = [
-    'http://localhost',
-    'http://localhost:8080',
-    'http://localhost:27017',
     'http://localhost:4200',    
   ];
 
