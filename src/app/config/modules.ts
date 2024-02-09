@@ -1,7 +1,7 @@
 import { Container } from "inversify";
 
 
-//user
+//Customer importaciones
 import CustomerGateway from '../domain/models/customer/gateway/customer.gateway';
 import { CustomerService } from "../infrastructure/driven-adapters/customer/customer.service";
 import { CustomerController } from "../infrastructure/entry-points/customer/customer-controller";
@@ -10,10 +10,6 @@ import { GetCustomerByNameUsecase } from "../domain/usecases/customer/get-custom
 import { GetCustomerByNitUsecase } from "../domain/usecases/customer/get-customer-by-nit.usecase";
 import { SaveCustomerUsecase } from "../domain/usecases/customer/save-customer.usecase";
 import { UpdateCustomerUsecase } from "../domain/usecases/customer/update-customer.usecase";
-
-
-
-
 
 
 export const container = new Container();
