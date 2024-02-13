@@ -30,6 +30,7 @@ import { GetsellerUsecase } from "../domain/usecases/SellersCase/get-seller.usec
 import { SavesellerUsecase} from "../domain/usecases/SellersCase/save-seller.usecase";
 
 
+
 export const container = new Container();
 //Customer
 container.bind<SaveCustomerUsecase>("SaveCustomerUsecase").to(SaveCustomerUsecase);
@@ -48,9 +49,12 @@ container.bind<GetPersonUsecase>("GetPersonUsecase").to(GetPersonUsecase);
 container.bind<PersonController>("PersonController").to(PersonController);
 container.bind<PersonGateway>("PersonGateway").to(PersonService);
 
+
 //Sellers
 container.bind<SavesellerUsecase>("SavesellerUsecase").to(SavesellerUsecase);
 container.bind<GetsellerUsecase >("GetsellerUsecase").to( GetsellerUsecase );
 container.bind<SellerController>("SellerController").to(SellerController);
 container.bind<sellersGateway>("sellersGateway").to(sellerService);
 // container.bind<sellerService>("sellerService").to(sellerService);
+
+
