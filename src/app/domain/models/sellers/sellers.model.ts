@@ -9,7 +9,8 @@ export interface sellersModel extends Document { // creo la interface de type sc
   name: string; 
   lastName: String; 
   phoneSeller: number;
-  email:string;  
+  email:string; 
+  password: string;  
 
   
 }
@@ -33,7 +34,11 @@ const sellerSchema = new Schema({ // se agregan los datos el typo de dato y si e
   },
   email: {
     type: String,
-    required: true,
+    required: true, 
+  },
+  password:{
+    type: String, 
+    required: true
   },
 
   dateCreate: { type: Date, default: Date.now },
