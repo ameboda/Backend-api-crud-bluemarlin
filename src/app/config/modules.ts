@@ -28,6 +28,7 @@ import { SellerService } from "../infrastructure/driven-adapters/sellers/sellers
 import { SellerController } from "../infrastructure/entry-points/sellers/seller-controller";
 import { GetsellerUsecase } from "../domain/usecases/SellersCase/get-seller.usecase";
 import { SavesellerUsecase} from "../domain/usecases/SellersCase/save-seller.usecase";
+import { GetsellerByccUsecase } from "../domain/usecases/SellersCase/get-seller-by-cc.usecase";
 
 
 
@@ -55,6 +56,5 @@ container.bind<SavesellerUsecase>("SavesellerUsecase").to(SavesellerUsecase);
 container.bind<GetsellerUsecase >("GetsellerUsecase").to( GetsellerUsecase );
 container.bind<SellerController>("SellerController").to(SellerController);
 container.bind<SellerGateway>("SellerGateway").to(SellerService);
-// container.bind<sellerService>("sellerService").to(sellerService);
-
+container.bind<GetsellerByccUsecase>("GetsellerByccUsecase").to(GetsellerByccUsecase);
 

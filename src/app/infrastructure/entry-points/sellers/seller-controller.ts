@@ -16,6 +16,8 @@ import {
 import { SavesellerUsecase} from "../../../domain/usecases/SellersCase/save-seller.usecase";
 import { GetsellerUsecase} from "../../../domain/usecases/SellersCase/get-seller.usecase"; 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
+import { GetsellerByccUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-cc.usecase";
+
 
 import {
     NOTIFICATION_STATUS_200,
@@ -37,6 +39,8 @@ export class SellerController implements interfaces.Controller {
         private savesellerUsecase: SavesellerUsecase,
         @inject("GetsellerUsecase")
         private getsellerUsecase: GetsellerUsecase,
+        @inject("GetsellerByccUsecase")
+        private getsellerByccUsecase: GetsellerByccUsecase,
     ) { }
 
     @httpPost("/")
@@ -70,7 +74,7 @@ export class SellerController implements interfaces.Controller {
             res
                 .status(status.INTERNAL_SERVER_ERROR)
                 .send(
-                    NotificationEnvelope.build("Customer", NOTIFICATION_STATUS_500, error)
+                    NotificationEnvelope.build("Seller", NOTIFICATION_STATUS_500, error)
                 );
         }
     }
@@ -108,8 +112,91 @@ export class SellerController implements interfaces.Controller {
                 );
         }
     }
+
+
+
+
+
+    @httpGet("/cc/:cc")
+    async getSellerByNit(
+        @requestParam("cc") cc: number,
+        @response() res: express.Response
+    ) {
+        try {
+            const getSellerByccUsecase = await this.getsellerByccUsecase.invoke(cc);
+            if (getSellerByccUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_404,
+                            getSellerByccUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_200,
+                            getSellerByccUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Seller", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
+
+    @httpPut("/:cc")
+    async updateSeller(
+        @requestParam("cc") currentcc: string,
+        @request() req: express.Request,
+        @response() res: express.Response
+    ) {
+        try {
+            const param = req.body;
+            const paramsAndCurrentcc = { currentcc, ...param };
+            const respondeUpdateSeller = await this.savesellerUsecase.invoke(paramsAndCurrentcc);
+            if (respondeUpdateSeller.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_404,
+                            respondeUpdateSeller.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_201,
+                            respondeUpdateSeller
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build(
+                        "Seller",
+                        NOTIFICATION_STATUS_500,
+                        error
+                    )
+                );
+        }
+    }
+
+
 }
-
-
-
-

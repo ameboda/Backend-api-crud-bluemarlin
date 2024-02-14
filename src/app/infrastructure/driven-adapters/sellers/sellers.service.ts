@@ -37,5 +37,46 @@ export class SellerService extends SellerGateway{
     }
     return getResponseBd;
   }
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX VALIDAR VENDEDOR Y RETORNAR LA INFORMACION SEGUN LA BUSQUEDAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  async updateBycc(obj: sellersModel) {
+    let updateByccResponseBd: any = null;
+    try {
+      const filter = { cc: obj.currentcc };
+      updateByccResponseBd = await sellers.updateOne(filter, obj);
+    } catch (error) {
+      updateByccResponseBd = {
+        error: error,
+      };
+    }
+    return updateByccResponseBd;
+  }
+
+
+  async getBySeller(cc: number) {
+    let getByccResponseBd: any = null;
+    try {
+      getByccResponseBd = await sellers.findOne({ cc: cc });
+    } catch (error) {
+      getByccResponseBd = {
+        error: error,
+      };
+    }
+    return getByccResponseBd;
+  }
+
+  async getBycc(numbercc: number) {
+    let getByccResponseBd: any = null;
+    try {
+      getByccResponseBd = await sellers.findOne({ cc: numbercc });
+    } catch (error) {
+      getByccResponseBd = {
+        error: error,
+      };
+    }
+    return getByccResponseBd;
+  }
+
 
 }
+
+
