@@ -3,10 +3,10 @@ import { injectable } from "inversify";
 import sellers, {
     sellersModel,
 } from "../../../domain/models/sellers/sellers.model";
-import sellerGateway from "../../../domain/models/sellers/gateway/sellers.gateway";
+import SellerGateway from "../../../domain/models/sellers/gateway/sellers.gateway";
 
 @injectable()
-export class sellerService extends sellerGateway{
+export class SellerService extends SellerGateway{
   async save(obj: sellersModel): Promise<sellersModel> {
     const newSeller = new sellers(obj);
     let responseBd: any = null;

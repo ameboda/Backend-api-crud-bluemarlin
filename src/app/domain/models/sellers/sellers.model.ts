@@ -7,7 +7,7 @@ export interface sellersModel extends Document { // creo la interface de type sc
   [x: string]: any;
   cc: number;
   name: string; 
-  lastName: String; 
+  lastName: string; 
   phoneSeller: number;
   email:string; 
   password: string;  

@@ -1,14 +1,15 @@
 import { inject, injectable } from "inversify";
-import sellersGateway from "../../models/sellers/gateway/sellers.gateway";
+import SellerGateway from "../../models/sellers/gateway/sellers.gateway";
 import { sellersModel } from "../../models/sellers/sellers.model"
 
 @injectable()
 export class GetsellerUsecase {
   constructor(
-    @inject("PersonGateway") private sellersGateway: sellersGateway
+    @inject("SellerGateway") private sellerGateway: SellerGateway
   ) {}
   async invoke(): Promise<sellersModel> {
-    const responseUserCase = await this.sellersGateway.get();
+    const responseUserCase = await this.sellerGateway.get();
+    console.log(responseUserCase)
     return responseUserCase;
   }
 } 

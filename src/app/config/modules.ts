@@ -23,8 +23,8 @@ import { SavePersonUsecase } from "../domain/usecases/practica-person/save-perso
 
 
 //Sellers importaciones
-import sellersGateway from '../domain/models/sellers/gateway/sellers.gateway';
-import { sellerService } from "../infrastructure/driven-adapters/sellers/sellers.service";
+import SellerGateway from '../domain/models/sellers/gateway/sellers.gateway';
+import { SellerService } from "../infrastructure/driven-adapters/sellers/sellers.service";
 import { SellerController } from "../infrastructure/entry-points/sellers/seller-controller";
 import { GetsellerUsecase } from "../domain/usecases/SellersCase/get-seller.usecase";
 import { SavesellerUsecase} from "../domain/usecases/SellersCase/save-seller.usecase";
@@ -54,7 +54,7 @@ container.bind<PersonGateway>("PersonGateway").to(PersonService);
 container.bind<SavesellerUsecase>("SavesellerUsecase").to(SavesellerUsecase);
 container.bind<GetsellerUsecase >("GetsellerUsecase").to( GetsellerUsecase );
 container.bind<SellerController>("SellerController").to(SellerController);
-container.bind<sellersGateway>("sellersGateway").to(sellerService);
+container.bind<SellerGateway>("SellerGateway").to(SellerService);
 // container.bind<sellerService>("sellerService").to(sellerService);
 
 
