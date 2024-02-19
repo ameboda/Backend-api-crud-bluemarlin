@@ -77,6 +77,46 @@ export class SellerService extends SellerGateway{
   }
 
 
+//xxxxxxxxxxxxxxxxxxxxxxxxxxx VALIDAR VENDEDOR Y RETORNAR LA INFORMACION SEGUN LA BUSQUEDA DE NAMEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+  async updateByname(obj: sellersModel) {
+    let updateBynameResponseBd: any = null;
+    try {
+      const filter = { name: obj.currentname };
+      updateBynameResponseBd = await sellers.updateOne(filter, obj);
+    } catch (error) {
+      updateBynameResponseBd = {
+        error: error,
+      };
+    }
+    return updateBynameResponseBd;
+  }
+
+
+  async getBySellername(name: string) {
+    let getBynameResponseBd: any = null;
+    try {
+      getBynameResponseBd = await sellers.findOne({ name: name });
+    } catch (error) {
+      getBynameResponseBd = {
+        error: error,
+      };
+    }
+    return getBynameResponseBd;
+  }
+
+  async getByname(name: string) {
+    let getBynameResponseBd: any = null;
+    try {
+      getBynameResponseBd = await sellers.findOne({ name: name });
+    } catch (error) {
+      getBynameResponseBd = {
+        error: error,
+      };
+    }
+    return getBynameResponseBd;
+  }
 }
 
 

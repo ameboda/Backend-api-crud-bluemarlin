@@ -29,7 +29,7 @@ import { SellerController } from "../infrastructure/entry-points/sellers/seller-
 import { GetsellerUsecase } from "../domain/usecases/SellersCase/get-seller.usecase";
 import { SavesellerUsecase} from "../domain/usecases/SellersCase/save-seller.usecase";
 import { GetsellerByccUsecase } from "../domain/usecases/SellersCase/get-seller-by-cc.usecase";
-
+import { GetsellerBynameUsecase } from "../domain/usecases/SellersCase/get-seller-by-name.usecase";
 
 
 export const container = new Container();
@@ -57,4 +57,6 @@ container.bind<GetsellerUsecase >("GetsellerUsecase").to( GetsellerUsecase );
 container.bind<SellerController>("SellerController").to(SellerController);
 container.bind<SellerGateway>("SellerGateway").to(SellerService);
 container.bind<GetsellerByccUsecase>("GetsellerByccUsecase").to(GetsellerByccUsecase);
+container.bind<GetsellerBynameUsecase>("GetsellerBynameUsecase").to(GetsellerBynameUsecase);
+
 

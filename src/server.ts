@@ -31,7 +31,6 @@ const corsOptions = {
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(StrucutreMiddleware());
-
   });
 
   const app = server.build();

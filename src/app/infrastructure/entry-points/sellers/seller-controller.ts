@@ -17,6 +17,7 @@ import { SavesellerUsecase} from "../../../domain/usecases/SellersCase/save-sell
 import { GetsellerUsecase} from "../../../domain/usecases/SellersCase/get-seller.usecase"; 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import { GetsellerByccUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-cc.usecase";
+import { GetsellerBynameUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-name.usecase";
 
 
 import {
@@ -41,6 +42,8 @@ export class SellerController implements interfaces.Controller {
         private getsellerUsecase: GetsellerUsecase,
         @inject("GetsellerByccUsecase")
         private getsellerByccUsecase: GetsellerByccUsecase,
+        @inject("GetsellerBynameUsecase")
+        private getsellerBynameUsecase: GetsellerBynameUsecase, 
     ) { }
 
     @httpPost("/")
@@ -117,7 +120,7 @@ export class SellerController implements interfaces.Controller {
 
 
 
-    @httpGet("/cc/:cc")
+    @httpGet("/:cc")
     async getSellerByNit(
         @requestParam("cc") cc: number,
         @response() res: express.Response
@@ -156,7 +159,7 @@ export class SellerController implements interfaces.Controller {
 
     @httpPut("/:cc")
     async updateSeller(
-        @requestParam("cc") currentcc: string,
+        @requestParam("cc") currentcc: number,
         @request() req: express.Request,
         @response() res: express.Response
     ) {
@@ -199,4 +202,95 @@ export class SellerController implements interfaces.Controller {
     }
 
 
+    // CONSULTA NAME 
+
+
+        @httpGet("/:name")
+    async getSellerByname(
+        @requestParam("name") name: string,
+        @response() res: express.Response
+    ) {
+        try {
+            const getSellerBynameUsecase = await this.getsellerBynameUsecase.invoke(name);
+            if (getSellerBynameUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_404,
+                            getSellerBynameUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_200,
+                            getSellerBynameUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Seller", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
+
+    @httpPut("/:name")
+    async updateSellerName(
+        @requestParam("name") currentname: string,
+        @request() req: express.Request,
+        @response() res: express.Response
+    ) {
+        try {
+            const param = req.body;
+            const paramsAndCurrentname = { currentname, ...param };
+            const respondeUpdateSellername = await this.savesellerUsecase.invoke(paramsAndCurrentname);
+            if (respondeUpdateSellername.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_404,
+                            respondeUpdateSellername.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_201,
+                            respondeUpdateSellername
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build(
+                        "Seller",
+                        NOTIFICATION_STATUS_500,
+                        error
+                    )
+                )
+        }
+    }
 }
+
+
+
+
+
+
+
+
