@@ -6,7 +6,9 @@ abstract class SellerGateway {
   abstract save(obj: sellersModel): Promise<sellersModel>;
   abstract get(): Promise<sellersModel>; 
   abstract getBycc(cc: number): Promise<sellersModel>;
-  abstract getByname(name: string): Promise<sellersModel>
+  abstract updateBycc(obj): Promise<sellersModel>;
+  abstract getByname(name: string): Promise<sellersModel>;
+
 }
 
 export default SellerGateway;
