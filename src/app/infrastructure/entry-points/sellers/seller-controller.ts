@@ -1,5 +1,5 @@
 import express = require("express");
-import status from "http-status";
+import status, { CONTINUE } from "http-status";
 import { inject } from "inversify";
 import {
     controller,
@@ -19,6 +19,7 @@ import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import { GetsellerByccUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-cc.usecase";
 import { GetsellerBynameUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-name.usecase";
 import { UpdateSellerUsecase } from "../../../domain/usecases/SellersCase/update-seller.usecase";
+import { GetSellerByemailUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-email";
 
 
 
@@ -30,6 +31,7 @@ import {
     NOTIFICATION_STATUS_422,
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
+import { Z_FIXED } from "zlib";
 
 
 
@@ -48,6 +50,8 @@ export class SellerController implements interfaces.Controller {
         private getsellerBynameUsecase: GetsellerBynameUsecase, 
         @inject("UpdateSellerUsecase")
         private updateSellerUsecase: UpdateSellerUsecase,
+        @inject("GetsellerByemailUsecase")
+        private getsellerByemailUsecase: GetSellerByemailUsecase,
     ) { }
 
     @httpPost("/")
@@ -336,7 +340,7 @@ export class SellerController implements interfaces.Controller {
 
 }
 
-
+//consulta EMAIL .  
 
 
 

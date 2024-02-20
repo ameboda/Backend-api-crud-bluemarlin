@@ -117,6 +117,19 @@ export class SellerService extends SellerGateway{
     }
     return getBynameResponseBd;
   }
+
+  async getByemail(email: string) {
+    let getByemailResponseBd: any = null;
+    try {
+      getByemailResponseBd = await sellers.findOne({ email: email});
+    } catch (error) {
+      getByemailResponseBd = {
+        error: error,
+      };
+    }
+    return getByemailResponseBd;
+  }
 }
+
 
 
