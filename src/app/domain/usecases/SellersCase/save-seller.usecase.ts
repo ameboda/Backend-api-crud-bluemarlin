@@ -9,7 +9,30 @@ export class SavesellerUsecase {
   ) {}
    async invoke(param: sellersModel): Promise<sellersModel> {
     let responseBD: any;
-    responseBD = this.sellerGateway.save(param);
-    return responseBD;
+    let responseSellerUsecase:any; 
+    let responsegetSellercc= await this.sellerGateway.getBycc(param.cc); 
+    let responsegetSellereemail= await this.sellerGateway.getByemail(param.email); 
+
+    //  validacion numero cedula
+    if(responsegetSellercc){
+      responseSellerUsecase= {
+        error: 'ya existe este numero de cedula'
+      }
+      return responseSellerUsecase; 
+
+      //validacion por correo 
+   
+      
+    }else if(responsegetSellereemail){
+      responseSellerUsecase={
+        error: 'ya existe este correo'
+      }
+      return responseSellerUsecase; 
+      //guardar usuario
+    }else{
+      responseBD= this.sellerGateway.save(param); 
+      return responseBD; 
+    }
+
   }
 }

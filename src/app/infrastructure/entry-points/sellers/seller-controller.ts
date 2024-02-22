@@ -1,5 +1,5 @@
 import express = require("express");
-import status, { CONTINUE } from "http-status";
+import status from "http-status";
 import { inject } from "inversify";
 import {
     controller,
@@ -15,14 +15,13 @@ import {
 
 import { SavesellerUsecase} from "../../../domain/usecases/SellersCase/save-seller.usecase";
 import { GetsellerUsecase} from "../../../domain/usecases/SellersCase/get-seller.usecase"; 
-import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import { GetsellerByccUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-cc.usecase";
-import { GetsellerBynameUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-name.usecase";
+import { GetsellerBynameUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-name.usecase";
 import { UpdateSellerUsecase } from "../../../domain/usecases/SellersCase/update-seller.usecase";
-import { GetSellerByemailUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-email";
+import { GetSellerByemailUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-email";
 
 
-
+import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
     NOTIFICATION_STATUS_200,
     NOTIFICATION_STATUS_201,
@@ -31,7 +30,6 @@ import {
     NOTIFICATION_STATUS_422,
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
-import { Z_FIXED } from "zlib";
 
 
 
@@ -191,7 +189,7 @@ export class SellerController implements interfaces.Controller {
                     .send(
                         NotificationEnvelope.build(
                             "Seller",
-                            NOTIFICATION_STATUS_201,
+                            NOTIFICATION_STATUS_200,
                             respondeUpdateSeller
                         )
                     );
@@ -213,7 +211,7 @@ export class SellerController implements interfaces.Controller {
     // CONSULTA NAME 
 
 
-        @httpGet("/:name")
+        @httpGet("/name/:name")
     async getSellerByname(
         @requestParam("name") name: string,
         @response() res: express.Response
@@ -259,7 +257,7 @@ export class SellerController implements interfaces.Controller {
         try {
             const param = req.body;
             const paramsAndCurrentname = { currentname, ...param };
-            const respondeUpdateSellername = await this.savesellerUsecase.invoke(paramsAndCurrentname);
+            const respondeUpdateSellername = await this.updateSellerUsecase.invoke(paramsAndCurrentname);
             if (respondeUpdateSellername.error) {
                 res
                     .status(status.OK)
@@ -294,24 +292,64 @@ export class SellerController implements interfaces.Controller {
         }
     }
 
-    @httpPut("/:cc")
-    async UpdateSellerCustomer(
-        @requestParam("cc") currentcc: string,
+    
+//consulta EMAIL .  
+
+    @httpGet("/email/:email")
+    async getSellerByemail(
+        @requestParam("email") email: string,
+        @response() res: express.Response
+    ) {
+        try {
+            const getSellerByemailUsecase = await this.getsellerByemailUsecase.invoke(email);
+            if (getSellerByemailUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_404,
+                            getSellerByemailUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_200,
+                            getSellerByemailUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Seller", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
+
+    @httpPut("/:email")
+    async updateSelleremail(
+        @requestParam("email") currentemail: string,
         @request() req: express.Request,
         @response() res: express.Response
     ) {
         try {
             const param = req.body;
-            const paramsAndCurrentcc = { currentcc, ...param };
-            const respondeUpdateSeller = await this.updateSellerUsecase.invoke(paramsAndCurrentcc);
-            if (respondeUpdateSeller.error) {
+            const paramsAndCurrentemail = { currentemail, ...param };
+            const respondeUpdateSelleremail = await this.updateSellerUsecase.invoke(paramsAndCurrentemail);
+            if (respondeUpdateSelleremail.error) {
                 res
                     .status(status.OK)
                     .send(
                         NotificationEnvelope.build(
-                            "Customer",
+                            "Seller",
                             NOTIFICATION_STATUS_404,
-                            respondeUpdateSeller.error
+                            respondeUpdateSelleremail.error
                         )
                     );
             } else {
@@ -321,7 +359,7 @@ export class SellerController implements interfaces.Controller {
                         NotificationEnvelope.build(
                             "Seller",
                             NOTIFICATION_STATUS_201,
-                            respondeUpdateSeller
+                            respondeUpdateSelleremail
                         )
                     );
             }
@@ -330,7 +368,7 @@ export class SellerController implements interfaces.Controller {
                 .status(status.INTERNAL_SERVER_ERROR)
                 .send(
                     NotificationEnvelope.build(
-                        "Sellerr",
+                        "Seller",
                         NOTIFICATION_STATUS_500,
                         error
                     )
@@ -340,7 +378,9 @@ export class SellerController implements interfaces.Controller {
 
 }
 
-//consulta EMAIL .  
+
+
+
 
 
 

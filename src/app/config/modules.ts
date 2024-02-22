@@ -31,7 +31,7 @@ import { SavesellerUsecase} from "../domain/usecases/SellersCase/save-seller.use
 import { GetsellerByccUsecase } from "../domain/usecases/SellersCase/get-seller-by-cc.usecase";
 import { GetsellerBynameUsecase } from "../domain/usecases/SellersCase/get-seller-by-name.usecase";
 import { UpdateSellerUsecase } from "../domain/usecases/SellersCase/update-seller.usecase";
-//import { GetsellerByEmailUsecase } from "../domain/usecases/SellersCase/get-seller-by-email.usecase"; 
+import { GetSellerByemailUsecase } from "../domain/usecases/SellersCase/get-seller-by-email"; 
 
 
 export const container = new Container();
@@ -61,5 +61,4 @@ container.bind<SellerGateway>("SellerGateway").to(SellerService);
 container.bind<GetsellerByccUsecase>("GetsellerByccUsecase").to(GetsellerByccUsecase);
 container.bind<GetsellerBynameUsecase>("GetsellerBynameUsecase").to(GetsellerBynameUsecase);
 container.bind<UpdateSellerUsecase>("UpdateSellerUsecase").to(UpdateSellerUsecase);
-//container.bind<GetsellerBynameUsecase>("GetsellerBynameUsecase").to(GetsellerBynameUsecase); EMAIL
-
+container.bind<GetSellerByemailUsecase>("GetsellerByemailUsecase").to(GetSellerByemailUsecase);

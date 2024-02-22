@@ -6,7 +6,7 @@ import sellers, {
 import SellerGateway from "../../../domain/models/sellers/gateway/sellers.gateway";
 
 @injectable()
-export class SellerService extends SellerGateway{
+export class SellerService extends SellerGateway {
   async save(obj: sellersModel): Promise<sellersModel> {
     const newSeller = new sellers(obj);
     let responseBd: any = null;
@@ -37,7 +37,7 @@ export class SellerService extends SellerGateway{
     }
     return getResponseBd;
   }
-//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX VALIDAR VENDEDOR Y RETORNAR LA INFORMACION SEGUN LA BUSQUEDAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// retorno de actualizacion por cedula 
   async updateBycc(obj: sellersModel) {
     let updateByccResponseBd: any = null;
     try {
@@ -51,19 +51,19 @@ export class SellerService extends SellerGateway{
     return updateByccResponseBd;
   }
 
-
-  async getBySeller(cc: number) {
-    let getByccResponseBd: any = null;
+//retorno de usuario por nombre 
+  async getByname(name: string) {
+    let getBynameResponseBd: any = null;
     try {
-      getByccResponseBd = await sellers.findOne({ cc: cc });
+      getBynameResponseBd = await sellers.findOne({ name: { $regex : new RegExp(name, "i") }});
     } catch (error) {
-      getByccResponseBd = {
+      getBynameResponseBd = {
         error: error,
       };
     }
-    return getByccResponseBd;
+    return getBynameResponseBd;
   }
-
+//retorno de usuario por numero de cedula 
   async getBycc(numbercc: number) {
     let getByccResponseBd: any = null;
     try {
@@ -76,60 +76,19 @@ export class SellerService extends SellerGateway{
     return getByccResponseBd;
   }
 
-
-//xxxxxxxxxxxxxxxxxxxxxxxxxxx VALIDAR VENDEDOR Y RETORNAR LA INFORMACION SEGUN LA BUSQUEDA DE NAMEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
-  async updateByname(obj: sellersModel) {
-    let updateBynameResponseBd: any = null;
-    try {
-      const filter = { name: obj.currentname };
-      updateBynameResponseBd = await sellers.updateOne(filter, obj);
-    } catch (error) {
-      updateBynameResponseBd = {
-        error: error,
-      };
-    }
-    return updateBynameResponseBd;
-  }
-
-
-  async getBySellername(name: string) {
-    let getBynameResponseBd: any = null;
-    try {
-      getBynameResponseBd = await sellers.findOne({ name: name });
-    } catch (error) {
-      getBynameResponseBd = {
-        error: error,
-      };
-    }
-    return getBynameResponseBd;
-  }
-
-  async getByname(name: string) {
-    let getBynameResponseBd: any = null;
-    try {
-      getBynameResponseBd = await sellers.findOne({ name: name });
-    } catch (error) {
-      getBynameResponseBd = {
-        error: error,
-      };
-    }
-    return getBynameResponseBd;
-  }
-
+  // retorno de usuario por email 
   async getByemail(email: string) {
     let getByemailResponseBd: any = null;
     try {
-      getByemailResponseBd = await sellers.findOne({ email: email});
+      getByemailResponseBd = await sellers.findOne({ name: { $regex : new RegExp(email, "i") }});
     } catch (error) {
       getByemailResponseBd = {
         error: error,
       };
     }
     return getByemailResponseBd;
-  }
+  } 
+
+
+  //
 }
-
-
-
