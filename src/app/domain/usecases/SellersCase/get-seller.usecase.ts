@@ -9,7 +9,6 @@ export class GetsellerUsecase {
   ) {}
   async invoke(): Promise<sellersModel> {
     const responseUserCase = await this.sellerGateway.get();
-    console.log(responseUserCase)
     return responseUserCase;
   }
 } 

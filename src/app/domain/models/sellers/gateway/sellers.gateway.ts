@@ -9,6 +9,7 @@ abstract class SellerGateway {
   abstract updateBycc(obj): Promise<sellersModel>;
   abstract getByname(name: String): Promise<sellersModel>;
   abstract getByemail(email:String): Promise<sellersModel>; 
+  abstract deleteBycc(cc: number): Promise<any>; 
 }
 
 export default SellerGateway;

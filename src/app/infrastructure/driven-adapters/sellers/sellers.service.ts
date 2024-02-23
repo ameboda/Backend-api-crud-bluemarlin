@@ -80,7 +80,7 @@ export class SellerService extends SellerGateway {
   async getByemail(email: string) {
     let getByemailResponseBd: any = null;
     try {
-      getByemailResponseBd = await sellers.findOne({ name: { $regex : new RegExp(email, "i") }});
+      getByemailResponseBd = await sellers.findOne({ email: { $regex : new RegExp(email, "i") }});
     } catch (error) {
       getByemailResponseBd = {
         error: error,
@@ -90,5 +90,17 @@ export class SellerService extends SellerGateway {
   } 
 
 
-  //
+  
+  async deleteBycc(numbercc: number) {
+    let deleteccResponseBd: any = null;
+    try {
+      deleteccResponseBd = await sellers.deleteOne({ cc: numbercc });
+    } catch (error) {
+      deleteccResponseBd = {
+        error: error,
+      };
+    }
+    return deleteccResponseBd;
+  }
+
 }

@@ -3,10 +3,12 @@ import status from "http-status";
 import { inject } from "inversify";
 import {
     controller,
+    httpDelete,
     httpGet,
     httpPost,
     httpPut,
     interfaces,
+    params,
     request,
     requestParam,
     response,
@@ -19,6 +21,7 @@ import { GetsellerByccUsecase } from "../../../domain/usecases/SellersCase/get-s
 import { GetsellerBynameUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-name.usecase";
 import { UpdateSellerUsecase } from "../../../domain/usecases/SellersCase/update-seller.usecase";
 import { GetSellerByemailUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-email";
+import { DeleteSellerUsecase  } from "../../../domain/usecases/SellersCase/delete-seller-usecase";
 
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
@@ -50,6 +53,8 @@ export class SellerController implements interfaces.Controller {
         private updateSellerUsecase: UpdateSellerUsecase,
         @inject("GetsellerByemailUsecase")
         private getsellerByemailUsecase: GetSellerByemailUsecase,
+        @inject("DeleteSellerUsecase")
+        private deletesellerUsecase : DeleteSellerUsecase
     ) { }
 
     @httpPost("/")
@@ -207,6 +212,45 @@ export class SellerController implements interfaces.Controller {
         }
     }
 
+
+    @httpDelete("/:cc")
+    async deleteBycc(
+        @requestParam("cc") cc: number,
+        @response() res: express.Response
+    ) {
+        try {
+            const deleteSellerByccUsecase = await this.deletesellerUsecase.invoke(cc);
+            if (deleteSellerByccUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_404,
+                            deleteSellerByccUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Seller",
+                            NOTIFICATION_STATUS_200,
+                            deleteSellerByccUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Seller", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
+
+    
 
     // CONSULTA NAME 
 
@@ -376,6 +420,8 @@ export class SellerController implements interfaces.Controller {
         }
     }
 
+
+   
 }
 
 
