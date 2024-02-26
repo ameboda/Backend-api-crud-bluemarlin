@@ -3,6 +3,9 @@ import { sellersModel } from "../sellers.model";
 
 @injectable()
 abstract class SellerGateway {
+  findBycc(cc: any) {
+    throw new Error("Method not implemented.");
+  }
   abstract save(obj: sellersModel): Promise<sellersModel>;
   abstract get(): Promise<sellersModel>; 
   abstract getBycc(cc: number): Promise<sellersModel>;

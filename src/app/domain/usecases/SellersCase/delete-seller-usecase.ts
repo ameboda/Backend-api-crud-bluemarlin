@@ -8,33 +8,30 @@ export class DeleteSellerUsecase {
     @inject("SellerGateway") private sellergateway: SellerGateway
   ) {}
 
-  async invoke(param): Promise<any> {
+  async invoke(param: number): Promise<any> { // Especifica el tipo de parámetro y el tipo de retorno
     let responseSellerUseCase: any;
-console.log(param , 'PARAMETRO')
-
-    return null
 
     
-    // Verificar si se proporcionó 'cc' o se debe usar 'currentcc'
-    if (!param.cc) {
-      param.cc = param.currentcc;
-    }
-
-    // Lógica de borrado
+    // logica de borrado '
     try {
-      const deletionResult = await this.sellergateway.deleteBycc(param.cc);
+      //1. se trae el vendedor de la base de datos 
+      let seller= await this.sellergateway.getBycc(param);
 
-      if (deletionResult.deletedCount === 0) {
-        responseSellerUseCase = { error: 'Vendedor no encontrado' };
-      } else {
-        responseSellerUseCase = deletionResult; 
-        
+      if(!seller){
+        throw new Error('vendedor no encontrado')
       }
-    } catch (error) {
-      responseSellerUseCase = { error: 'Error al eliminar el vendedor' }; 
-    }
 
-    return responseSellerUseCase;
+      //2. se elimina el vendedor obtenido 
+      await this.sellergateway.deleteBycc(param); 
+
+      //3. manejar el error si no se puede eliminar 
+      return true ; 
+    } catch (error) {
+
+      console.error('Error al eliminar al vendedor', error); 
+      return false 
+      
+    }
   }
 
   }
