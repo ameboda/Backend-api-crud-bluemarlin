@@ -11,6 +11,7 @@ export interface sellersModel extends Document { // creo la interface de type sc
   phoneSeller: number;
   email:string; 
   password: string;  
+  typeUser: number;  // 0: Vendedor normal, 1: Usuario con más permisos
 
   
 }
@@ -39,6 +40,10 @@ const sellerSchema = new Schema({ // se agregan los datos el typo de dato y si e
   password:{
     type: String, 
     required: true
+  },
+  typeUser: {
+    type : Number, 
+    require: true
   },
 
   dateCreate: { type: Date, default: Date.now },

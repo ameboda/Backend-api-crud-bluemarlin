@@ -24,6 +24,7 @@ import { GetSellerByemailUsecase  } from "../../../domain/usecases/SellersCase/g
 import { DeleteSellerUsecase  } from "../../../domain/usecases/SellersCase/delete-seller-usecase";
 
 
+
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
     NOTIFICATION_STATUS_200,
@@ -55,6 +56,7 @@ export class SellerController implements interfaces.Controller {
         private getsellerByemailUsecase: GetSellerByemailUsecase,
         @inject("DeleteSellerUsecase")
         private deletesellerUsecase : DeleteSellerUsecase
+       
     ) { }
 
     @httpPost("/")
@@ -421,7 +423,6 @@ export class SellerController implements interfaces.Controller {
     }
 
 
-   
 }
 
 

@@ -4,6 +4,7 @@ import sellers, {
     sellersModel,
 } from "../../../domain/models/sellers/sellers.model";
 import SellerGateway from "../../../domain/models/sellers/gateway/sellers.gateway";
+import { params } from "inversify-express-utils";
 
 @injectable()
 export class SellerService extends SellerGateway {
@@ -90,7 +91,7 @@ export class SellerService extends SellerGateway {
   } 
 
 
-  
+  // borrar vendedor con metodo delete 
   async deleteBycc(numbercc: number) {
     let deleteccResponseBd: any = null;
     try {
@@ -104,3 +105,7 @@ export class SellerService extends SellerGateway {
   }
 
 }
+
+
+
+

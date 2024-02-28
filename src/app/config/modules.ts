@@ -35,6 +35,11 @@ import { GetSellerByemailUsecase } from "../domain/usecases/SellersCase/get-sell
 import { DeleteSellerUsecase } from "../domain/usecases/SellersCase/delete-seller-usecase"; 
 
 
+//LOGIN 
+import {LoginSellerUsecase} from "../domain/usecases/loginCase/login-seller.usercase"
+
+
+
 
 export const container = new Container();
 //Customer
@@ -66,3 +71,7 @@ container.bind<UpdateSellerUsecase>("UpdateSellerUsecase").to(UpdateSellerUsecas
 container.bind<GetSellerByemailUsecase>("GetsellerByemailUsecase").to(GetSellerByemailUsecase);
 container.bind<DeleteSellerUsecase>("DeleteSellerUsecase").to(DeleteSellerUsecase);
 
+
+
+//Login 
+container.bind<LoginSellerUsecase>("loginSellerUsecase").to(LoginSellerUsecase);
