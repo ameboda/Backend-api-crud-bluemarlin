@@ -36,8 +36,10 @@ import { DeleteSellerUsecase } from "../domain/usecases/SellersCase/delete-selle
 
 
 //LOGIN 
+import  LoginGateway from "../domain/models/login/gateway/login.gateway";
+import {LoginService } from "../infrastructure/driven-adapters/login/login.service";
 import {LoginSellerUsecase} from "../domain/usecases/loginCase/login-seller.usercase"
-
+import {LoginController} from "../infrastructure/entry-points/login/login-controller";
 
 
 
@@ -74,4 +76,8 @@ container.bind<DeleteSellerUsecase>("DeleteSellerUsecase").to(DeleteSellerUsecas
 
 
 //Login 
-container.bind<LoginSellerUsecase>("loginSellerUsecase").to(LoginSellerUsecase);
+
+container.bind<LoginSellerUsecase>("LoginSellerUsecase").to(LoginSellerUsecase);
+container.bind<LoginController>("loginController").to(LoginController);
+container.bind<LoginService>("loginService").to(LoginService);
+container.bind<LoginGateway>("LoginGateway").to(LoginService);

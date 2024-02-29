@@ -9,7 +9,12 @@ export class LoginSellerUsecase {
     @inject("LoginGateway") private loginGateway: LoginGateway
   ) {}
 
-  async invoke(param: sellersModel): Promise<sellersModel | { error: string }> { // actualizacion retorno tipo 
+
+  async invoke(param: sellersModel): Promise<sellersModel | { error: string }> { // actualizacion retorno tipo
+    
+   
+
+
     // Validación de email y contraseña
     if (!param.email || !param.password) {
       return { error: "Correo o contraseña incorrectos" };
@@ -17,11 +22,11 @@ export class LoginSellerUsecase {
 
     try {
       const existingSeller = await this.loginGateway.login(param.email);
-
       if (existingSeller) {
         const passwordMatch = await bcrypt.compare(param.password, existingSeller.password);
 
         if (passwordMatch) {
+          existingSeller.password = '';
           return existingSeller; // retornado con exito!
         } else {
           return { error: "Correo o contraseña incorrectos" };

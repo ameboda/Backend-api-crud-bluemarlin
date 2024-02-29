@@ -38,6 +38,7 @@ const sellerSchema = new Schema({ // se agregan los datos el typo de dato y si e
     required: true, 
   },
   password:{
+    
     type: String, 
     required: true
   },

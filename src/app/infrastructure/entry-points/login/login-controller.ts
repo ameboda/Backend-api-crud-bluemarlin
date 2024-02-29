@@ -33,8 +33,8 @@ import {
 
 
 
-@controller("/Login")
-export class SellerController implements interfaces.Controller {
+@controller("/login")
+export class LoginController implements interfaces.Controller {
 
     constructor(
         @inject("LoginSellerUsecase")
@@ -46,45 +46,43 @@ export class SellerController implements interfaces.Controller {
     
 //Obtener el login segun correo y contraseña del usuario  
 
-    @httpGet("/login")
-    async loginseller(
-        @requestParam("email") email: any,
-        @response() res: express.Response
-    ) {
-        try {
-            const loginSellerUsecase = await this.loginSellerUsecase.invoke(email);
-            if (loginSellerUsecase.error) {
-                res
-                    .status(status.OK)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Seller",
-                            NOTIFICATION_STATUS_404,
-                            loginSellerUsecase.error
-                        )
-                    );
-            } else {
-                res
-                    .status(status.OK)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Seller",
-                            NOTIFICATION_STATUS_200,
-                            loginSellerUsecase
-                        )
-                    );
-            }
-        } catch (error) {
+@httpPost("/")
+async login(req: express.Request, res: express.Response) {
+    try {
+        const callUsecaselogin = await this.loginSellerUsecase.invoke(
+            req.body,
+        );
+        if (callUsecaselogin.error) {
             res
-                .status(status.INTERNAL_SERVER_ERROR)
+                .status(NOTIFICATION_STATUS_422)
                 .send(
-                    NotificationEnvelope.build("Seller", NOTIFICATION_STATUS_500, error)
+                    NotificationEnvelope.build(
+                        "Login",
+                        NOTIFICATION_STATUS_422,
+                        callUsecaselogin.error
+                    )
+                );
+        } else {
+            res
+                .status(status.CREATED)
+                .send(
+                    NotificationEnvelope.build(
+                        "Login",
+                        NOTIFICATION_STATUS_201,
+                        callUsecaselogin
+                    )
                 );
         }
+    } catch (error) {
+        res
+            .status(status.INTERNAL_SERVER_ERROR)
+            .send(
+                NotificationEnvelope.build("Login", NOTIFICATION_STATUS_500, error)
+            );
     }
+}
 
-
-
+   
 
 }
 
