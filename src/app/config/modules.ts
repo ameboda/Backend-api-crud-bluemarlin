@@ -35,11 +35,19 @@ import { GetSellerByemailUsecase } from "../domain/usecases/SellersCase/get-sell
 import { DeleteSellerUsecase } from "../domain/usecases/SellersCase/delete-seller-usecase"; 
 
 
-//LOGIN 
+//Login 
 import  LoginGateway from "../domain/models/login/gateway/login.gateway";
 import {LoginService } from "../infrastructure/driven-adapters/login/login.service";
 import {LoginSellerUsecase} from "../domain/usecases/loginCase/login-seller.usercase"
 import {LoginController} from "../infrastructure/entry-points/login/login-controller";
+
+
+//Categories
+
+import CategoriesGateway  from '../domain/models/categories/gateway/categories.gateway';
+import { CategoriesService } from "../infrastructure/driven-adapters/categories/categories.service";
+import { CategoriesController} from "../infrastructure/entry-points/categories/categories-controller";
+import { SavecategoriesUsecase} from "../domain/usecases/categories/save-categories.usecase";
 
 
 
@@ -81,3 +89,10 @@ container.bind<LoginSellerUsecase>("LoginSellerUsecase").to(LoginSellerUsecase);
 container.bind<LoginController>("loginController").to(LoginController);
 container.bind<LoginService>("loginService").to(LoginService);
 container.bind<LoginGateway>("LoginGateway").to(LoginService);
+
+
+
+//Categories hacer las imporaciones de categories
+container.bind<SavecategoriesUsecase>("SavecategoriesUsecase").to(SavecategoriesUsecase);
+container.bind<CategoriesController>("categoriesControllerr").to(CategoriesController);
+container.bind<CategoriesGateway>("CategoriesGateway").to(CategoriesService);

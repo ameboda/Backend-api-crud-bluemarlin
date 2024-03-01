@@ -4,7 +4,7 @@ import sellers, {
     sellersModel,
 } from "../../../domain/models/sellers/sellers.model";
 import SellerGateway from "../../../domain/models/sellers/gateway/sellers.gateway";
-import { params } from "inversify-express-utils";
+// import { params } from "inversify-express-utils";
 
 @injectable()
 export class SellerService extends SellerGateway {
