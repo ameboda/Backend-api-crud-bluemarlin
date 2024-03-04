@@ -48,6 +48,8 @@ import CategoriesGateway  from '../domain/models/categories/gateway/categories.g
 import { CategoriesService } from "../infrastructure/driven-adapters/categories/categories.service";
 import { CategoriesController} from "../infrastructure/entry-points/categories/categories-controller";
 import { SavecategoriesUsecase} from "../domain/usecases/categories/save-categories.usecase";
+import { UpdateCategoriesUsecase } from "../domain/usecases/categories/update-categories.usecase";
+
 
 
 
@@ -96,3 +98,4 @@ container.bind<LoginGateway>("LoginGateway").to(LoginService);
 container.bind<SavecategoriesUsecase>("SavecategoriesUsecase").to(SavecategoriesUsecase);
 container.bind<CategoriesController>("categoriesControllerr").to(CategoriesController);
 container.bind<CategoriesGateway>("CategoriesGateway").to(CategoriesService);
+container.bind<UpdateCategoriesUsecase>("UpdateCategoriesUsecase").to(UpdateCategoriesUsecase);

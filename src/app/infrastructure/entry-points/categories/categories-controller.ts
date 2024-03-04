@@ -16,7 +16,7 @@ import {
 
 
 import { SavecategoriesUsecase} from "../../../domain/usecases/categories/save-categories.usecase";
-
+import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
 
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
@@ -32,13 +32,15 @@ import {
 
 
 
+
 @controller("/Categories")
 export class CategoriesController implements interfaces.Controller {
 
     constructor(
         @inject("SavecategoriesUsecase")
         private savecategoriesUsecase: SavecategoriesUsecase,
-      
+        @inject("UpdateCategoriesUsecase")
+        private updateCategoriesUsecase: UpdateCategoriesUsecase,
        
     ) { }
 
@@ -81,6 +83,52 @@ export class CategoriesController implements interfaces.Controller {
         }
     }
 
+    //Actualizacion Categories
+
+    @httpPut("/") 
+    async updateCategories(
+        @requestParam("categories") categories: string,
+        @request() req: express.Request,
+        @response() res: express.Response
+    ) {
+        try {
+            const param = req.body;
+            const paramsAndcategories = { categories, ...param };
+            const respondeUpdateCategories= await this.updateCategoriesUsecase.invoke(paramsAndcategories);
+            if (respondeUpdateCategories.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Categories",
+                            NOTIFICATION_STATUS_404,
+                            respondeUpdateCategories.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Categories",
+                            NOTIFICATION_STATUS_200,
+                            respondeUpdateCategories
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build(
+                        "Categories",
+                        NOTIFICATION_STATUS_500,
+                        error
+                    )
+                );
+        }
+    }
+
 
 
 
@@ -89,7 +137,7 @@ export class CategoriesController implements interfaces.Controller {
 
     //Consulta  Categories 
 
-    //Actualizacion Categories
+    
 
     //Delete Categoria 
  

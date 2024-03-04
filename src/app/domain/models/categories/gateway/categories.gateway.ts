@@ -5,7 +5,10 @@ import { categoriesModel } from "../categories.model";
 abstract class CategoriesGateway {
 
   abstract save(obj: categoriesModel): Promise<categoriesModel>;
- 
+  abstract updateCategories(obj: categoriesModel): Promise<categoriesModel>;
+
+
+
 }
 
 export default CategoriesGateway ;
