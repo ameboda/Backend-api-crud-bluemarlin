@@ -18,6 +18,7 @@ import {
 import { SavecategoriesUsecase} from "../../../domain/usecases/categories/save-categories.usecase";
 import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
 import { GetcategoriesUsecase } from "../../../domain/usecases/categories/get-categories.usecase"
+import {GetCategoriesBynameUsecase} from "../../../domain/usecases/categories/get-categories-by-name"
 
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
@@ -44,6 +45,8 @@ export class CategoriesController implements interfaces.Controller {
         private updateCategoriesUsecase: UpdateCategoriesUsecase,
         @inject("GetcategoriesUsecase")
         private getcategoriesUsecase: GetcategoriesUsecase,
+        @inject("GetCategoriesBynameUsecase")
+        private getCategoriesBynameUsecase: GetCategoriesBynameUsecase,
        
     ) { }
 
@@ -122,6 +125,47 @@ export class CategoriesController implements interfaces.Controller {
                 );
         }
     }
+
+     // CONSULTA CATEGORIA POR NAME 
+
+
+     @httpGet("/categories/:categories")
+     async getCategoriesByname(
+         @requestParam("categories") categories: string,
+         @response() res: express.Response
+     ) {
+         try {
+             const getCategoriesBynameUsecase = await this.getCategoriesBynameUsecase.invoke(categories);
+             if (getCategoriesBynameUsecase.error) {
+                 res
+                     .status(status.OK)
+                     .send(
+                         NotificationEnvelope.build(
+                             "Categories",
+                             NOTIFICATION_STATUS_404,
+                             getCategoriesBynameUsecase.error
+                         )
+                     );
+             } else {
+                 res
+                     .status(status.OK)
+                     .send(
+                         NotificationEnvelope.build(
+                             "Categories",
+                             NOTIFICATION_STATUS_200,
+                             getCategoriesBynameUsecase
+                         )
+                     );
+             }
+         } catch (error) {
+             res
+                 .status(status.INTERNAL_SERVER_ERROR)
+                 .send(
+                     NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_500, error)
+                 );
+         }
+     }
+
 
        //Actualizacion Categories
 

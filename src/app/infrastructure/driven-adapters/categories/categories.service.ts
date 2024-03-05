@@ -3,6 +3,7 @@ import categories, {
   categoriesModel,
 } from "../../../domain/models/categories/categories.model";
 import CategoriesGateway  from "../../../domain/models/categories/gateway/categories.gateway";
+import CategoriesModel from "../../../domain/models/categories/categories.model";
 
 
 @injectable()
@@ -54,10 +55,18 @@ async get(): Promise<categoriesModel> {
   }
 
 
+//retorno de Categoria por nombre 
+async getByname(categories: string) {
+  let getBynameResponseBd: any = null;
+  try {
+    getBynameResponseBd = await CategoriesModel.findOne({ categories: { $regex : new RegExp(categories, "i") }});
+  } catch (error) {
+    getBynameResponseBd = {
+      error: error,
+    };
+  }
+  return getBynameResponseBd;
+}
 
-
-
-
-//si da error significa que que por estos lares esta 
 
 }

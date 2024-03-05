@@ -50,6 +50,8 @@ import { CategoriesController} from "../infrastructure/entry-points/categories/c
 import { SavecategoriesUsecase} from "../domain/usecases/categories/save-categories.usecase";
 import { UpdateCategoriesUsecase } from "../domain/usecases/categories/update-categories.usecase";
 import { GetcategoriesUsecase } from "../domain/usecases/categories/get-categories.usecase";
+import {GetCategoriesBynameUsecase} from "../domain/usecases/categories/get-categories-by-name";
+
 
 
 
@@ -100,3 +102,4 @@ container.bind<CategoriesController>("categoriesControllerr").to(CategoriesContr
 container.bind<CategoriesGateway>("CategoriesGateway").to(CategoriesService);
 container.bind<UpdateCategoriesUsecase>("UpdateCategoriesUsecase").to(UpdateCategoriesUsecase);
 container.bind<GetcategoriesUsecase>("GetcategoriesUsecase").to( GetcategoriesUsecase );
+container.bind<GetCategoriesBynameUsecase>("GetCategoriesBynameUsecase").to(GetCategoriesBynameUsecase);
