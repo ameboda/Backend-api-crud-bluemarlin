@@ -6,7 +6,7 @@ abstract class CategoriesGateway {
 
   abstract save(obj: categoriesModel): Promise<categoriesModel>;
   abstract updateCategories(obj: categoriesModel): Promise<categoriesModel>;
-
+  abstract get(): Promise<categoriesModel>; 
 
 
 }

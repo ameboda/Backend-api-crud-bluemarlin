@@ -1,10 +1,8 @@
 import { injectable } from "inversify";
 import categories, {
-    categoriesModel,
+  categoriesModel,
 } from "../../../domain/models/categories/categories.model";
-import CategoriesGateway from "../../../domain/models/categories/gateway/categories.gateway";
- import { params } from "inversify-express-utils";
-import CategoriesModel from "../../../domain/models/categories/categories.model";
+import CategoriesGateway  from "../../../domain/models/categories/gateway/categories.gateway";
 
 
 @injectable()
@@ -27,7 +25,20 @@ export class CategoriesService extends CategoriesGateway {
     }
     return responseBd;
   }
-  
+
+//retorno de categorias
+async get(): Promise<categoriesModel> {
+  let getResponseBd: any = null;
+  try {
+    getResponseBd = await categories.find();
+  } catch (error) {
+    getResponseBd = {
+      error: error,
+    };
+  }
+  return getResponseBd;
+}
+
   // retorno de actualizacion categoria 
   async updateCategories(obj: categoriesModel) {
     let updateCategoriesResponseBd: any = null;
@@ -42,7 +53,8 @@ export class CategoriesService extends CategoriesGateway {
     return updateCategoriesResponseBd;
   }
 
-//retorno de categoria por nombre 
+
+
 
 
 

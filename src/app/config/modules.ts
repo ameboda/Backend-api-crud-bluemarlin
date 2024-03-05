@@ -49,7 +49,7 @@ import { CategoriesService } from "../infrastructure/driven-adapters/categories/
 import { CategoriesController} from "../infrastructure/entry-points/categories/categories-controller";
 import { SavecategoriesUsecase} from "../domain/usecases/categories/save-categories.usecase";
 import { UpdateCategoriesUsecase } from "../domain/usecases/categories/update-categories.usecase";
-
+import { GetcategoriesUsecase } from "../domain/usecases/categories/get-categories.usecase";
 
 
 
@@ -99,3 +99,4 @@ container.bind<SavecategoriesUsecase>("SavecategoriesUsecase").to(Savecategories
 container.bind<CategoriesController>("categoriesControllerr").to(CategoriesController);
 container.bind<CategoriesGateway>("CategoriesGateway").to(CategoriesService);
 container.bind<UpdateCategoriesUsecase>("UpdateCategoriesUsecase").to(UpdateCategoriesUsecase);
+container.bind<GetcategoriesUsecase>("GetcategoriesUsecase").to( GetcategoriesUsecase );
