@@ -1,4 +1,4 @@
-import { injectable } from "inversify";
+import { id, injectable } from "inversify";
 import categories, {
   categoriesModel,
 } from "../../../domain/models/categories/categories.model";
@@ -67,6 +67,25 @@ async getByname(categories: string) {
   }
   return getBynameResponseBd;
 }
+
+// Obtener una categoría por ID
+
+async getById(id: string): Promise<categoriesModel | null> { 
+  try {
+    // Busca la categoria por id
+    const category = await categories.findById({ _id: id });
+
+    // Retorna el vendedor si existe, null en caso contrario
+    return category; 
+
+  } catch (error) {
+    // Maneja el error de forma específica
+    console.error('Error obteniendo categoria por id', error);
+    throw new Error('Error al obtener la categoria'); 
+  }
+}
+
+ // borrar vendedor con metodo delete 
 
 
 }

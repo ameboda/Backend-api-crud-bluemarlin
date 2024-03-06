@@ -17,9 +17,10 @@ import {
 
 import { SavecategoriesUsecase} from "../../../domain/usecases/categories/save-categories.usecase";
 import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
-import { GetcategoriesUsecase } from "../../../domain/usecases/categories/get-categories.usecase"
-import {GetCategoriesBynameUsecase} from "../../../domain/usecases/categories/get-categories-by-name"
-
+import { GetcategoriesUsecase } from "../../../domain/usecases/categories/get-categories.usecase";
+import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name";
+import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categories/get-categories-byID";
+// import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -47,6 +48,10 @@ export class CategoriesController implements interfaces.Controller {
         private getcategoriesUsecase: GetcategoriesUsecase,
         @inject("GetCategoriesBynameUsecase")
         private getCategoriesBynameUsecase: GetCategoriesBynameUsecase,
+        @inject("GetcategoriesByIDUsecase")
+        private getcategoriesByIDUsecase: GetcategoriesByIDUsecase,
+        // @inject("DeleteCategoriesUsecase")
+        // private deleteCategoriesUsecase  : DeleteCategoriesUsecase ,
        
     ) { }
 
@@ -213,33 +218,88 @@ export class CategoriesController implements interfaces.Controller {
         }
     }
 
+    //Consulta  Categoria por ID 
 
+    @httpGet("/:id")
+    async getById(@requestParam("id") id: string, @response() res: express.Response) {
+      try {
+        const category = await this.getcategoriesByIDUsecase.invoke(id); // Llamada al caso de uso
+    
+        if (!category) {
+          return res
+            .status(status.NOT_FOUND)
+            .send('Categoría no encontrada'); // 
+        }
+    
+        return res
+          .status(status.OK)
+          .send(category);
+    
+      } catch (error) {
+        res
+          .status(status.INTERNAL_SERVER_ERROR)
+          .send(NotificationEnvelope.build("categoria no encontrada", NOTIFICATION_STATUS_500, error));
+      }
+    }
+    
 
-
-
-   
-
-    //Consulta  Categories 
+ 
 
     
 
     //Delete Categoria 
  
-    //consulta EMAIL .  
 
+//     @httpDelete("/")
+//     async deleteCategoryByName(
+//         @requestParam("categories") categories: string,
+//         @response() res: express.Response
+//     ) {
+//         try {
+//             const deleteCategoriesBynameUsecase = await this.deleteCategoriesUsecase.invoke(categories);
+//             if ( deleteCategoriesBynameUsecase.error) {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Categories",
+//                             NOTIFICATION_STATUS_404,
+//                             deleteCategoriesBynameUsecase.error
+//                         )
+//                     );
+//             } else {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Categories",
+//                             NOTIFICATION_STATUS_200,
+//                             deleteCategoriesBynameUsecase
+//                         )
+//                     );
+//             }
+//         } catch (error) {
+//             res
+//                 .status(status.INTERNAL_SERVER_ERROR)
+//                 .send(
+//                     NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_500, error)
+//                 );
+//         }
+//     }
 
 
    
 
 
+// }
+
+
+
+
+
+
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
