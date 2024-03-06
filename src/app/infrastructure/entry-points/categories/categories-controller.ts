@@ -20,7 +20,7 @@ import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/upd
 import { GetcategoriesUsecase } from "../../../domain/usecases/categories/get-categories.usecase";
 import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name";
 import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categories/get-categories-byID";
-// import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name";
+import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -50,8 +50,8 @@ export class CategoriesController implements interfaces.Controller {
         private getCategoriesBynameUsecase: GetCategoriesBynameUsecase,
         @inject("GetcategoriesByIDUsecase")
         private getcategoriesByIDUsecase: GetcategoriesByIDUsecase,
-        // @inject("DeleteCategoriesUsecase")
-        // private deleteCategoriesUsecase  : DeleteCategoriesUsecase ,
+        @inject("DeleteCategoriesUsecase")
+        private deleteCategoriesUsecase  : DeleteCategoriesUsecase ,
        
     ) { }
 
@@ -250,43 +250,30 @@ export class CategoriesController implements interfaces.Controller {
     //Delete Categoria 
  
 
-//     @httpDelete("/")
-//     async deleteCategoryByName(
-//         @requestParam("categories") categories: string,
-//         @response() res: express.Response
-//     ) {
-//         try {
-//             const deleteCategoriesBynameUsecase = await this.deleteCategoriesUsecase.invoke(categories);
-//             if ( deleteCategoriesBynameUsecase.error) {
-//                 res
-//                     .status(status.OK)
-//                     .send(
-//                         NotificationEnvelope.build(
-//                             "Categories",
-//                             NOTIFICATION_STATUS_404,
-//                             deleteCategoriesBynameUsecase.error
-//                         )
-//                     );
-//             } else {
-//                 res
-//                     .status(status.OK)
-//                     .send(
-//                         NotificationEnvelope.build(
-//                             "Categories",
-//                             NOTIFICATION_STATUS_200,
-//                             deleteCategoriesBynameUsecase
-//                         )
-//                     );
-//             }
-//         } catch (error) {
-//             res
-//                 .status(status.INTERNAL_SERVER_ERROR)
-//                 .send(
-//                     NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_500, error)
-//                 );
-//         }
-//     }
-
+    @httpDelete("/:name")
+    async deleteCategoryByName(
+      @requestParam("name") name: string,
+      @response() res: express.Response
+    ) {
+      try {
+        const result = await this.deleteCategoriesUsecase.invoke(name);
+ 
+        if (!result) { // Maneja el caso donde no se eliminó
+          res
+            .status(status.NOT_FOUND)
+            .send(NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_404, 'Categoría no encontrada'));
+          return; 
+        }
+ 
+        res
+          .status(status.OK)
+          .send(NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_200, 'Categoría eliminada exitosamente'));
+      } catch (error) {
+        res
+          .status(status.INTERNAL_SERVER_ERROR)
+          .send(NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_500, error));
+      }
+    }
 
    
 

@@ -1,33 +1,37 @@
-// import { inject, injectable } from "inversify";
-// import { categoriesModel } from "../../models/categories/categories.model"; 
-// import CategoriesGateway from "../../models/categories/gateway/categories.gateway";
+import { inject, injectable } from "inversify";
+import { categoriesModel } from "../../models/categories/categories.model"; 
+import CategoriesGateway from "../../models/categories/gateway/categories.gateway";
 
-// interface DeleteCategoriesResult {  // Define una interfaz clara
-//   success: boolean;
-//   error?: string; // Para manejar posibles errores
-// }  
+@injectable()
+export class DeleteCategoriesUsecase {
+  constructor(
+    @inject("CategoriesGateway") private categoriesGateway: CategoriesGateway
+  ) {}
+  async invoke(param: any): Promise<any> { // Especifica el tipo de parámetro y el tipo de retorno
+    let responseSellerUseCase: any;
 
-// @injectable()
-// export class DeleteCategoriesUsecase {
-//   constructor(
-//     @inject("CategoriesGateway") private categoriesGateway: CategoriesGateway
-//   ) {}
+    
+    // logica de borrado '
+    try {
+      //1. se trae la categoriade la base de datos 
+      let category= await this.categoriesGateway.getByname(param);
 
-//   async invoke(param: string): Promise<DeleteCategoriesResult> {
-//     try {
-//       const category: categoriesModel | null = await this.categoriesGateway.getByname(param); // Usa el modelo
+      if(!category){
+        throw new Error('categoria no encontrada')
+      }
 
-//       if (!category) {
-//         return { success: false, error: 'Categoria no encontrada' }; // Retorna un objeto con la estructura adecuada
-//       }
+      //2. se elimina el vendedor obtenido 
+      await this.categoriesGateway.deleteCategoriesByname(param); 
 
-//       await this.categoriesGateway.deleteCategoryByName(param);
-//       return { success: true };
+      //3. manejar el error si no se puede eliminar 
+      return true ; 
+    } catch (error) {
 
-//     } catch (error) {
-//       console.error('Error al eliminar la categoria', error); 
-//       return { success: false, error: error.message }; // Manejo de errores 
-//     }
-//   }
-// } 
+      console.error('Error al eliminar Categoria', error); 
+      return false 
+      
+    }
+  }
+
+} 
 

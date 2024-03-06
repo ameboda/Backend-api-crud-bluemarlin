@@ -85,7 +85,16 @@ async getById(id: string): Promise<categoriesModel | null> {
   }
 }
 
- // borrar vendedor con metodo delete 
-
-
+ // borrar categoria con metodo delete 
+ 
+ async deleteCategoriesByname(categories: string): Promise<boolean> {
+  try {
+    await CategoriesModel.deleteOne({ categories: categories });
+    return true; // Se eliminó exitosamente
+  } catch (error) {
+    console.error('Error eliminando categoría: ', error);
+    return false; // Error en la eliminación
+  }
 }
+}
+

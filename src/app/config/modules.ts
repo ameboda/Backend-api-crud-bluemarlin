@@ -52,7 +52,7 @@ import { UpdateCategoriesUsecase } from "../domain/usecases/categories/update-ca
 import { GetcategoriesUsecase } from "../domain/usecases/categories/get-categories.usecase";
 import { GetCategoriesBynameUsecase } from "../domain/usecases/categories/get-categories-by-name";
 import { GetcategoriesByIDUsecase } from "../domain/usecases/categories/get-categories-byID";
-
+import { DeleteCategoriesUsecase } from "../domain/usecases/categories/delete-categories-by-name"; 
 
 
 export const container = new Container();
@@ -104,3 +104,4 @@ container.bind<UpdateCategoriesUsecase>("UpdateCategoriesUsecase").to(UpdateCate
 container.bind<GetcategoriesUsecase>("GetcategoriesUsecase").to( GetcategoriesUsecase );
 container.bind<GetCategoriesBynameUsecase>("GetCategoriesBynameUsecase").to(GetCategoriesBynameUsecase);
 container.bind<GetcategoriesByIDUsecase>("GetcategoriesByIDUsecase").to(GetcategoriesByIDUsecase);
+container.bind<DeleteCategoriesUsecase>("DeleteCategoriesUsecase").to(DeleteCategoriesUsecase); 

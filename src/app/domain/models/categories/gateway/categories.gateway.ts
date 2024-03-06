@@ -9,8 +9,8 @@ abstract class CategoriesGateway {
   abstract getByname(categories: String): Promise<categoriesModel>;
   abstract updateCategories(obj: categoriesModel): Promise<categoriesModel>; 
   abstract getById(id: string): Promise<categoriesModel>; 
-
-  // abstract deleteCategoryByName(categories: String):Promise<categoriesModel>; 
+  abstract deleteCategoriesByname(name: string): Promise<boolean>;
+  
 
 }
 
