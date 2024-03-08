@@ -6,7 +6,7 @@ import { categoriesModel } from "../../../domain/models/categories/categories.mo
 export class SavecategoriesUsecase {
   constructor(@inject("CategoriesGateway") private categoriesGateway: CategoriesGateway) {}
 
-  async invoke(param: categoriesModel): Promise<categoriesModel> {
+    async invoke(param: categoriesModel): Promise<categoriesModel> {
     let responseBD: any; 
 
 

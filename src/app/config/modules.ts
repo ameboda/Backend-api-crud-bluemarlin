@@ -55,6 +55,16 @@ import { GetcategoriesByIDUsecase } from "../domain/usecases/categories/get-cate
 import { DeleteCategoriesUsecase } from "../domain/usecases/categories/delete-categories-by-name"; 
 
 
+
+//Products 
+import ProductGateway from "../domain/models/products/gateway/products.gateway";
+import { ProductService } from "../infrastructure/driven-adapters/products/products.service";
+import { ProductsController } from "../infrastructure/entry-points/products/product-controller";
+import { SaveproductUsecase } from "../domain/usecases/products/save-products.usecase";
+import { GetproductUsecase } from "../domain/usecases/products/get-products.usecase";
+
+
+
 export const container = new Container();
 //Customer
 container.bind<SaveCustomerUsecase>("SaveCustomerUsecase").to(SaveCustomerUsecase);
@@ -96,12 +106,22 @@ container.bind<LoginGateway>("LoginGateway").to(LoginService);
 
 
 
-//Categories hacer las imporaciones de categories
+//Categories 
 container.bind<SavecategoriesUsecase>("SavecategoriesUsecase").to(SavecategoriesUsecase);
-container.bind<CategoriesController>("categoriesControllerr").to(CategoriesController);
+container.bind<CategoriesController>("categoriesController").to(CategoriesController);
 container.bind<CategoriesGateway>("CategoriesGateway").to(CategoriesService);
 container.bind<UpdateCategoriesUsecase>("UpdateCategoriesUsecase").to(UpdateCategoriesUsecase);
 container.bind<GetcategoriesUsecase>("GetcategoriesUsecase").to( GetcategoriesUsecase );
 container.bind<GetCategoriesBynameUsecase>("GetCategoriesBynameUsecase").to(GetCategoriesBynameUsecase);
 container.bind<GetcategoriesByIDUsecase>("GetcategoriesByIDUsecase").to(GetcategoriesByIDUsecase);
 container.bind<DeleteCategoriesUsecase>("DeleteCategoriesUsecase").to(DeleteCategoriesUsecase); 
+
+
+
+
+// Products 
+container.bind<ProductGateway>("ProductGateway").to(ProductService);
+container.bind<ProductsController>("productsController").to(ProductsController);
+container.bind<SaveproductUsecase>("SaveproductUsecase").to(SaveproductUsecase);
+container.bind<GetproductUsecase>("GetproductUsecase").to( GetproductUsecase );
+
