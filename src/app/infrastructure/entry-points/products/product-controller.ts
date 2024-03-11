@@ -17,9 +17,9 @@ import {
 
 import { SaveproductUsecase } from "../../../domain/usecases/products/save-products.usecase";
 import { GetproductUsecase } from "../../../domain/usecases/products/get-products.usecase"; 
+import { GetproductBycodeUsecase  } from "../../../domain/usecases/products/get-product-by-code"; 
 // import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
 // import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name";
-// import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categories/get-categories-byID";
 // import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
@@ -44,12 +44,12 @@ export class ProductsController implements interfaces.Controller {
         private saveproductUsecase: SaveproductUsecase,
         @inject("GetproductUsecase")
         private getproductUsecase: GetproductUsecase,
+        @inject("GetproductBycodeUsecase")
+        private getproductBycodeUsecase  : GetproductBycodeUsecase  ,
         // @inject("UpdateCategoriesUsecase")
         // private updateCategoriesUsecase: UpdateCategoriesUsecase,
         // @inject("GetCategoriesBynameUsecase")
         // private getCategoriesBynameUsecase: GetCategoriesBynameUsecase,
-        // @inject("GetcategoriesByIDUsecase")
-        // private getcategoriesByIDUsecase: GetcategoriesByIDUsecase,
         // @inject("DeleteCategoriesUsecase")
         // private deleteCategoriesUsecase  : DeleteCategoriesUsecase ,
        
@@ -131,46 +131,50 @@ export class ProductsController implements interfaces.Controller {
         }
     }
 
-    //  // CONSULTA CATEGORIA POR NAME 
+    // Obtener productos por cod-prod
+
+    @httpGet("/product/:product")
+    async getproductBycode(
+        @requestParam("codProduct") codProduct: string,
+        @response() res: express.Response
+    ) {
+        try {
+            const getProductBycodeUsecase = await this.getproductBycodeUsecase.invoke(codProduct);
+            if (getProductBycodeUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Product",
+                            NOTIFICATION_STATUS_404,
+                            getProductBycodeUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Product",
+                            NOTIFICATION_STATUS_200,
+                            getProductBycodeUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Product", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
 
 
-    //  @httpGet("/categories/:categories")
-    //  async getCategoriesByname(
-    //      @requestParam("categories") categories: string,
-    //      @response() res: express.Response
-    //  ) {
-    //      try {
-    //          const getCategoriesBynameUsecase = await this.getCategoriesBynameUsecase.invoke(categories);
-    //          if (getCategoriesBynameUsecase.error) {
-    //              res
-    //                  .status(status.OK)
-    //                  .send(
-    //                      NotificationEnvelope.build(
-    //                          "Categories",
-    //                          NOTIFICATION_STATUS_404,
-    //                          getCategoriesBynameUsecase.error
-    //                      )
-    //                  );
-    //          } else {
-    //              res
-    //                  .status(status.OK)
-    //                  .send(
-    //                      NotificationEnvelope.build(
-    //                          "Categories",
-    //                          NOTIFICATION_STATUS_200,
-    //                          getCategoriesBynameUsecase
-    //                      )
-    //                  );
-    //          }
-    //      } catch (error) {
-    //          res
-    //              .status(status.INTERNAL_SERVER_ERROR)
-    //              .send(
-    //                  NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_500, error)
-    //              );
-    //      }
-    //  }
 
+  
+
+  
 
     //    //Actualizacion Categories
 

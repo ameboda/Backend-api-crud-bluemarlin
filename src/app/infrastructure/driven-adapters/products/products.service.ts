@@ -1,8 +1,10 @@
-import { id, injectable } from "inversify";
+import { injectable } from "inversify";
 import product, {
     productModel,
 } from "../../../domain/models/products/products.model";
 import ProductGateway from "../../../domain/models/products/gateway/products.gateway";
+
+
 
 
 
@@ -43,5 +45,26 @@ async get(): Promise<productModel> {
 }
 
 
+// Obtener un producto por CodProd
+
+async getBycode(codProduct: string) {
+  let getBycodeResponseBd: any = null;
+  try {
+    getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(codProduct, "i") }});
+  } catch (error) {
+    getBycodeResponseBd = {
+      error: error,
+    };
+  }
+  return getBycodeResponseBd;  
 }
+
+
+
+
+
+}
+
+
+
 

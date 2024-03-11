@@ -1,4 +1,4 @@
-import { Document, model, Schema } from "mongoose";
+import { Document, model, ObjectId, Schema } from "mongoose";
 
 export interface productModel extends Document {
   [X: string]: any;
@@ -10,6 +10,9 @@ export interface productModel extends Document {
     nameLetter: string;
     nameNumber: number;
     quantity: number;
+    color: {
+      objectid: string;
+      nombre: string;}; 
   }[];
   creationdate: Date;
 }
@@ -18,7 +21,7 @@ const productSchema = new Schema({
   codProduct: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   nombre: {
     type: String,
@@ -37,6 +40,10 @@ const productSchema = new Schema({
         nameLetter: { type: String },
         nameNumber: { type: Number },
         quantity: { type: Number },
+        color: {
+          objectid: { type: String },
+          nombre: { type: String },
+        }
       },
     ],
     default: [], // Define un valor inicial para el array como vacío

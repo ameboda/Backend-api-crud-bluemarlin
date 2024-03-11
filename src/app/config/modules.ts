@@ -62,7 +62,7 @@ import { ProductService } from "../infrastructure/driven-adapters/products/produ
 import { ProductsController } from "../infrastructure/entry-points/products/product-controller";
 import { SaveproductUsecase } from "../domain/usecases/products/save-products.usecase";
 import { GetproductUsecase } from "../domain/usecases/products/get-products.usecase";
-
+import {GetproductBycodeUsecase} from "../domain/usecases/products/get-product-by-code"
 
 
 export const container = new Container();
@@ -124,4 +124,5 @@ container.bind<ProductGateway>("ProductGateway").to(ProductService);
 container.bind<ProductsController>("productsController").to(ProductsController);
 container.bind<SaveproductUsecase>("SaveproductUsecase").to(SaveproductUsecase);
 container.bind<GetproductUsecase>("GetproductUsecase").to( GetproductUsecase );
+container.bind<GetproductBycodeUsecase>("GetproductBycodeUsecase").to( GetproductBycodeUsecase );
 
