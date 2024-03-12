@@ -3,6 +3,7 @@ import product, {
     productModel,
 } from "../../../domain/models/products/products.model";
 import ProductGateway from "../../../domain/models/products/gateway/products.gateway";
+import ProductModel from "../../../domain/models/products/products.model";
 
 
 
@@ -60,7 +61,53 @@ async getBycode(codProduct: string) {
 }
 
 
+async getByname(name: string) {
+  let getBycodeResponseBd: any = null;
+  try {
+    getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(name, "i") }});
+  } catch (error) {
+    getBycodeResponseBd = {
+      error: error,
+    };
+  }
+  return getBycodeResponseBd;  
+}
 
+
+ // borrar categoria con metodo delete 
+ 
+ async deleteBycode(codProduct: String): Promise<productModel> {
+  try {
+    const deletedProduct = await ProductModel.findOneAndDelete({ CodProd: codProduct }); 
+
+    if (!deletedProduct) {
+      throw new Error('Producto no encontrado');
+    } 
+
+    return deletedProduct; // Retorna el producto eliminado
+
+  } catch (error) {
+    console.error('Error eliminando Producto: ', error);
+    throw error; // Relanza el error para su manejo apropiado
+  }
+}
+
+
+
+ // Actualizar Producto 
+ async updateProduct(obj: productModel) {
+  let updateProductResponseBd: any = null;
+  try {
+    const filter = { codProduct: obj.codProduct };
+    updateProductResponseBd= await product.updateOne(filter, obj);
+  } catch (error) {
+    updateProductResponseBd = {
+      error: error,
+    };
+  }
+  return updateProductResponseBd;
+  
+}
 
 
 }

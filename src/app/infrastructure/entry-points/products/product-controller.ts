@@ -18,9 +18,9 @@ import {
 import { SaveproductUsecase } from "../../../domain/usecases/products/save-products.usecase";
 import { GetproductUsecase } from "../../../domain/usecases/products/get-products.usecase"; 
 import { GetproductBycodeUsecase  } from "../../../domain/usecases/products/get-product-by-code"; 
-// import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
-// import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name";
-// import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name";
+import { GetproductBynameUsecase } from "../../../domain/usecases/products/get-product-by-name";
+import {  UpdateProductUsecase } from "../../../domain/usecases/products/update-product.usecase";
+import { DeleteProductUsecase } from "../../../domain/usecases/products/delete-product-bycode";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -46,12 +46,12 @@ export class ProductsController implements interfaces.Controller {
         private getproductUsecase: GetproductUsecase,
         @inject("GetproductBycodeUsecase")
         private getproductBycodeUsecase  : GetproductBycodeUsecase  ,
-        // @inject("UpdateCategoriesUsecase")
-        // private updateCategoriesUsecase: UpdateCategoriesUsecase,
-        // @inject("GetCategoriesBynameUsecase")
-        // private getCategoriesBynameUsecase: GetCategoriesBynameUsecase,
-        // @inject("DeleteCategoriesUsecase")
-        // private deleteCategoriesUsecase  : DeleteCategoriesUsecase ,
+        @inject("GetproductBynameUsecase")
+        private getproductBynameUsecase: GetproductBynameUsecase,
+        @inject("UpdateProductUsecase")
+        private updateProductUsecase: UpdateProductUsecase,
+        @inject("DeleteProductUsecase")
+        private deleteProductUsecase : DeleteProductUsecase  ,
        
     ) { }
 
@@ -176,121 +176,118 @@ export class ProductsController implements interfaces.Controller {
 
   
 
-    //    //Actualizacion Categories
+    // Obtener producto por nombre 
 
-    // @httpPut("/") 
-    // async updateCategories(
-    //     @requestParam("categories") categories: string,
-    //     @request() req: express.Request,
-    //     @response() res: express.Response
-    // ) {
-    //     try {
-    //         const param = req.body;
-    //         const paramsAndcategories = { categories, ...param };
-    //         const respondeUpdateCategories= await this.updateCategoriesUsecase.invoke(paramsAndcategories);
-    //         if (respondeUpdateCategories.error) {
-    //             res
-    //                 .status(status.OK)
-    //                 .send(
-    //                     NotificationEnvelope.build(
-    //                         "Categories",
-    //                         NOTIFICATION_STATUS_404,
-    //                         respondeUpdateCategories.error
-    //                     )
-    //                 );
-    //         } else {
-    //             res
-    //                 .status(status.OK)
-    //                 .send(
-    //                     NotificationEnvelope.build(
-    //                         "Categories",
-    //                         NOTIFICATION_STATUS_200,
-    //                         respondeUpdateCategories
-    //                     )
-    //                 );
-    //         }
-    //     } catch (error) {
-    //         res
-    //             .status(status.INTERNAL_SERVER_ERROR)
-    //             .send(
-    //                 NotificationEnvelope.build(
-    //                     "Categories",
-    //                     NOTIFICATION_STATUS_500,
-    //                     error
-    //                 )
-    //             );
-    //     }
-    // }
+    @httpGet("/product/:name")
+    async getproductByname(
+        @requestParam("name") name: string,
+        @response() res: express.Response
+    ) {
+        try {
+            const getProductBynameUsecase = await this.getproductBynameUsecase.invoke(name);
+            if (getProductBynameUsecase.error) {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Product",
+                            NOTIFICATION_STATUS_404,
+                            getProductBynameUsecase.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.OK)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Product",
+                            NOTIFICATION_STATUS_200,
+                            getProductBynameUsecase
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Product", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
 
-    // //Consulta  Categoria por ID 
+   //ACTUALIZACION PRODUCTOS 
 
-    // @httpGet("/:id")
-    // async getById(@requestParam("id") id: string, @response() res: express.Response) {
-    //   try {
-    //     const category = await this.getcategoriesByIDUsecase.invoke(id); // Llamada al caso de uso
-    
-    //     if (!category) {
-    //       return res
-    //         .status(status.NOT_FOUND)
-    //         .send('Categoría no encontrada'); // 
-    //     }
-    
-    //     return res
-    //       .status(status.OK)
-    //       .send(category);
-    
-    //   } catch (error) {
-    //     res
-    //       .status(status.INTERNAL_SERVER_ERROR)
-    //       .send(NotificationEnvelope.build("categoria no encontrada", NOTIFICATION_STATUS_500, error));
-    //   }
-    // }
-    
-
+   @httpPut("/") 
+   async updateProduct(
+       @requestParam("codProduct") codProduct: string,
+       @request() req: express.Request,
+       @response() res: express.Response
+   ) {
+       try {
+           const param = req.body;
+           const paramsAndproduct = { codProduct, ...param };
+           const respondeUpdateProduct= await this.updateProductUsecase.invoke(paramsAndproduct);
+           if (respondeUpdateProduct.error) {
+               res
+                   .status(status.OK)
+                   .send(
+                       NotificationEnvelope.build(
+                           "Product",
+                           NOTIFICATION_STATUS_404,
+                           respondeUpdateProduct.error
+                       )
+                   );
+           } else {
+               res
+                   .status(status.OK)
+                   .send(
+                       NotificationEnvelope.build(
+                           "Product",
+                           NOTIFICATION_STATUS_200,
+                           respondeUpdateProduct
+                       )
+                   );
+           }
+       } catch (error) {
+           res
+               .status(status.INTERNAL_SERVER_ERROR)
+               .send(
+                   NotificationEnvelope.build(
+                       "Product",
+                       NOTIFICATION_STATUS_500,
+                       error
+                   )
+               );
+       }
+   }
+ 
+ //Delete Productos
  
 
-    
+ @httpDelete("/:name")
+ async deleteProductByName(
+   @requestParam("codProduct") codProduct: string,
+   @response() res: express.Response
+ ) {
+   try {
+     const result = await this.deleteProductUsecase.invoke(codProduct);
 
-    // //Delete Categoria 
- 
+     if (!result) { // Maneja el caso donde no se eliminó
+       res
+         .status(status.NOT_FOUND)
+         .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, 'Producto  no encontrad'));
+       return; 
+     }
 
-    // @httpDelete("/:name")
-    // async deleteCategoryByName(
-    //   @requestParam("name") name: string,
-    //   @response() res: express.Response
-    // ) {
-    //   try {
-    //     const result = await this.deleteCategoriesUsecase.invoke(name);
- 
-    //     if (!result) { // Maneja el caso donde no se eliminó
-    //       res
-    //         .status(status.NOT_FOUND)
-    //         .send(NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_404, 'Categoría no encontrada'));
-    //       return; 
-    //     }
- 
-    //     res
-    //       .status(status.OK)
-    //       .send(NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_200, 'Categoría eliminada exitosamente'));
-    //   } catch (error) {
-    //     res
-    //       .status(status.INTERNAL_SERVER_ERROR)
-    //       .send(NotificationEnvelope.build("Categories", NOTIFICATION_STATUS_500, error));
-    //   }
-    // }
-
-   
-
-
-// }
-
-
-
-
-
-
-
-
+     res
+       .status(status.OK)
+       .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_200, 'Producto eliminado exitosamente'));
+   } catch (error) {
+     res
+       .status(status.INTERNAL_SERVER_ERROR)
+       .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error));
+   }
+ }
 
 
 }

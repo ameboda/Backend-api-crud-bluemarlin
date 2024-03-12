@@ -63,7 +63,9 @@ import { ProductsController } from "../infrastructure/entry-points/products/prod
 import { SaveproductUsecase } from "../domain/usecases/products/save-products.usecase";
 import { GetproductUsecase } from "../domain/usecases/products/get-products.usecase";
 import {GetproductBycodeUsecase} from "../domain/usecases/products/get-product-by-code"
-
+import { GetproductBynameUsecase } from "../domain/usecases/products/get-product-by-name";
+import { DeleteProductUsecase } from "../domain/usecases/products/delete-product-bycode";
+import { UpdateProductUsecase } from "../domain/usecases/products/update-product.usecase";
 
 export const container = new Container();
 //Customer
@@ -125,4 +127,6 @@ container.bind<ProductsController>("productsController").to(ProductsController);
 container.bind<SaveproductUsecase>("SaveproductUsecase").to(SaveproductUsecase);
 container.bind<GetproductUsecase>("GetproductUsecase").to( GetproductUsecase );
 container.bind<GetproductBycodeUsecase>("GetproductBycodeUsecase").to( GetproductBycodeUsecase );
-
+container.bind<GetproductBynameUsecase>("GetproductBynameUsecase").to(GetproductBynameUsecase)
+container.bind<DeleteProductUsecase>("DeleteProductUsecase").to(DeleteProductUsecase);
+container.bind<UpdateProductUsecase>("UpdateProductUsecase").to(UpdateProductUsecase); 
