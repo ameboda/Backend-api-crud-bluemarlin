@@ -172,12 +172,6 @@ export class ProductsController implements interfaces.Controller {
         }
     }
 
-
-
-  
-
-  
-
     // Obtener producto por nombre 
 
     @httpGet("/name/:name")
@@ -221,14 +215,13 @@ export class ProductsController implements interfaces.Controller {
 
    @httpPut("/code/:codProduct") 
    async updateProduct(
-       @requestParam("codProduct") codProduct: string,
+       @requestParam("codProduct") codProductOriginal: string,
        @request() req: express.Request,
        @response() res: express.Response
    ) {
        try {
-            console.log('este es un mensaje para ver el :',codProduct)
            const param = req.body;
-           const paramsAndproduct = { codProduct, ...param };
+           const paramsAndproduct = { codProductOriginal, ...param };
            const respondeUpdateProduct= await this.updateProductUsecase.invoke(paramsAndproduct);
            if (respondeUpdateProduct.error) {
                res

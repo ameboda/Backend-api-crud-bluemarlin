@@ -5,11 +5,6 @@ import product, {
 import ProductGateway from "../../../domain/models/products/gateway/products.gateway";
 import ProductModel from "../../../domain/models/products/products.model";
 
-
-
-
-
-
 @injectable()
 export class ProductService extends ProductGateway {
   async save(obj: productModel): Promise<productModel> {
@@ -78,7 +73,8 @@ async getByname(name: string) {
  async updateProduct(obj: productModel) {
   let updateProductResponseBd: any = null;
   try {
-    const filter = { codProduct: obj.codProduct };
+    const filter = { codProduct: obj.codProductOriginal };
+    // console.log('veamos el filter papito',cod)
     updateProductResponseBd= await product.updateOne(filter, obj);
   } catch (error) {
     updateProductResponseBd = {
