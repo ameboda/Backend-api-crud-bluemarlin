@@ -1,0 +1,285 @@
+import express = require("express");
+import status from "http-status";
+import { inject } from "inversify";
+import {
+    controller,
+    httpDelete,
+    httpGet,
+    httpPost,
+    httpPut,
+    interfaces,
+    params,
+    request,
+    requestParam,
+    response,
+} from "inversify-express-utils";
+
+
+ import { SavecolorUsecase  } from "../../../domain/usecases/textilecolor/save-color.usecase";
+// import { GetproductUsecase } from "../../../domain/usecases/products/get-products.usecase"; 
+// import { GetproductBynameUsecase } from "../../../domain/usecases/products/get-product-by-name";
+
+import { NotificationEnvelope } from "../../helper/notification/exceptions";
+import {
+    NOTIFICATION_STATUS_200,
+    NOTIFICATION_STATUS_201,
+    NOTIFICATION_STATUS_400,
+    NOTIFICATION_STATUS_404,
+    NOTIFICATION_STATUS_422,
+    NOTIFICATION_STATUS_500,
+} from "../../helper/notification/exceptions.constants";
+
+
+
+
+
+@controller("/Color")
+export class ColorController implements interfaces.Controller {
+
+    constructor(
+        @inject("SavecolorUsecase")
+        private savecolorUsecase: SavecolorUsecase,
+        // @inject("GetproductUsecase")
+        // private getproductUsecase: GetproductUsecase,
+        // @inject("GetproductBycodeUsecase")
+        // private getproductBycodeUsecase  : GetproductBycodeUsecase  ,
+        // @inject("GetproductBynameUsecase")
+       
+    ) { }
+
+
+    // Crear Colores
+
+    @httpPost("/")
+    async saveColor(req: express.Request, res: express.Response) {
+        try {
+            const callUsecaseColor = await this.savecolorUsecase.invoke(
+                req.body,
+            );
+            if (callUsecaseColor.error) {
+                res
+                    .status(NOTIFICATION_STATUS_422)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Color",
+                            NOTIFICATION_STATUS_422,
+                            callUsecaseColor.error
+                        )
+                    );
+            } else {
+                res
+                    .status(status.CREATED)
+                    .send(
+                        NotificationEnvelope.build(
+                            "Color",
+                            NOTIFICATION_STATUS_201,
+                            callUsecaseColor
+                        )
+                    );
+            }
+        } catch (error) {
+            res
+                .status(status.INTERNAL_SERVER_ERROR)
+                .send(
+                    NotificationEnvelope.build("Color", NOTIFICATION_STATUS_500, error)
+                );
+        }
+    }
+
+
+//      //Obtener Productos
+
+//      @httpGet("/")
+//     async get(@response() res: express.Response) {
+//         try {
+//             const getproductUsecase = await this.getproductUsecase.invoke();
+//             if (getproductUsecase.error) {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Products",
+//                             NOTIFICATION_STATUS_400,
+//                             getproductUsecase.error
+//                         )
+//                     );
+//             } else {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Products",
+//                             NOTIFICATION_STATUS_200,
+//                             getproductUsecase
+//                         )
+//                     );
+//             }
+//         } catch (error) {
+//             res
+//                 .status(status.INTERNAL_SERVER_ERROR)
+//                 .send(
+//                     NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error)
+//                 );
+//         }
+//     }
+
+//     // Obtener productos por cod-prod
+
+//     @httpGet("/product/:product")
+//     async getproductBycode(
+//         @requestParam("codProduct") codProduct: string,
+//         @response() res: express.Response
+//     ) {
+//         try {
+//             const getProductBycodeUsecase = await this.getproductBycodeUsecase.invoke(codProduct);
+//             if (getProductBycodeUsecase.error) {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Product",
+//                             NOTIFICATION_STATUS_404,
+//                             getProductBycodeUsecase.error
+//                         )
+//                     );
+//             } else {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Product",
+//                             NOTIFICATION_STATUS_200,
+//                             getProductBycodeUsecase
+//                         )
+//                     );
+//             }
+//         } catch (error) {
+//             res
+//                 .status(status.INTERNAL_SERVER_ERROR)
+//                 .send(
+//                     NotificationEnvelope.build("Product", NOTIFICATION_STATUS_500, error)
+//                 );
+//         }
+//     }
+
+
+
+  
+
+  
+
+//     // Obtener producto por nombre 
+
+//     @httpGet("/product/:name")
+//     async getproductByname(
+//         @requestParam("name") name: string,
+//         @response() res: express.Response
+//     ) {
+//         try {
+//             const getProductBynameUsecase = await this.getproductBynameUsecase.invoke(name);
+//             if (getProductBynameUsecase.error) {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Product",
+//                             NOTIFICATION_STATUS_404,
+//                             getProductBynameUsecase.error
+//                         )
+//                     );
+//             } else {
+//                 res
+//                     .status(status.OK)
+//                     .send(
+//                         NotificationEnvelope.build(
+//                             "Product",
+//                             NOTIFICATION_STATUS_200,
+//                             getProductBynameUsecase
+//                         )
+//                     );
+//             }
+//         } catch (error) {
+//             res
+//                 .status(status.INTERNAL_SERVER_ERROR)
+//                 .send(
+//                     NotificationEnvelope.build("Product", NOTIFICATION_STATUS_500, error)
+//                 );
+//         }
+//     }
+
+//    //ACTUALIZACION PRODUCTOS 
+
+//    @httpPut("/") 
+//    async updateProduct(
+//        @requestParam("codProduct") codProduct: string,
+//        @request() req: express.Request,
+//        @response() res: express.Response
+//    ) {
+//        try {
+//            const param = req.body;
+//            const paramsAndproduct = { codProduct, ...param };
+//            const respondeUpdateProduct= await this.updateProductUsecase.invoke(paramsAndproduct);
+//            if (respondeUpdateProduct.error) {
+//                res
+//                    .status(status.OK)
+//                    .send(
+//                        NotificationEnvelope.build(
+//                            "Product",
+//                            NOTIFICATION_STATUS_404,
+//                            respondeUpdateProduct.error
+//                        )
+//                    );
+//            } else {
+//                res
+//                    .status(status.OK)
+//                    .send(
+//                        NotificationEnvelope.build(
+//                            "Product",
+//                            NOTIFICATION_STATUS_200,
+//                            respondeUpdateProduct
+//                        )
+//                    );
+//            }
+//        } catch (error) {
+//            res
+//                .status(status.INTERNAL_SERVER_ERROR)
+//                .send(
+//                    NotificationEnvelope.build(
+//                        "Product",
+//                        NOTIFICATION_STATUS_500,
+//                        error
+//                    )
+//                );
+//        }
+//    }
+ 
+//  //Delete Productos
+ 
+
+//  @httpDelete("/:name")
+//  async deleteProductByName(
+//    @requestParam("codProduct") codProduct: string,
+//    @response() res: express.Response
+//  ) {
+//    try {
+//      const result = await this.deleteProductUsecase.invoke(codProduct);
+
+//      if (!result) { // Maneja el caso donde no se eliminó
+//        res
+//          .status(status.NOT_FOUND)
+//          .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, 'Producto  no encontrad'));
+//        return; 
+//      }
+
+//      res
+//        .status(status.OK)
+//        .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_200, 'Producto eliminado exitosamente'));
+//    } catch (error) {
+//      res
+//        .status(status.INTERNAL_SERVER_ERROR)
+//        .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error));
+//    }
+//  }
+
+
+}

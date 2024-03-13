@@ -31,7 +31,7 @@ import { SavesellerUsecase} from "../domain/usecases/SellersCase/save-seller.use
 import { GetsellerByccUsecase } from "../domain/usecases/SellersCase/get-seller-by-cc.usecase";
 import { GetsellerBynameUsecase } from "../domain/usecases/SellersCase/get-seller-by-name.usecase";
 import { UpdateSellerUsecase } from "../domain/usecases/SellersCase/update-seller.usecase";
-import { GetSellerByemailUsecase } from "../domain/usecases/SellersCase/get-seller-by-email"; 
+import { GetSellerByemailUsecase } from "../domain/usecases/SellersCase/get-seller-by-email.usecase"; 
 import { DeleteSellerUsecase } from "../domain/usecases/SellersCase/delete-seller-usecase"; 
 
 
@@ -50,9 +50,9 @@ import { CategoriesController} from "../infrastructure/entry-points/categories/c
 import { SavecategoriesUsecase} from "../domain/usecases/categories/save-categories.usecase";
 import { UpdateCategoriesUsecase } from "../domain/usecases/categories/update-categories.usecase";
 import { GetcategoriesUsecase } from "../domain/usecases/categories/get-categories.usecase";
-import { GetCategoriesBynameUsecase } from "../domain/usecases/categories/get-categories-by-name";
-import { GetcategoriesByIDUsecase } from "../domain/usecases/categories/get-categories-byID";
-import { DeleteCategoriesUsecase } from "../domain/usecases/categories/delete-categories-by-name"; 
+import { GetCategoriesBynameUsecase } from "../domain/usecases/categories/get-categories-by-name.usecase";
+import { GetcategoriesByIDUsecase } from "../domain/usecases/categories/get-categories-byID.usecase";
+import { DeleteCategoriesUsecase } from "../domain/usecases/categories/delete-categories-by-name.usecase"; 
 
 
 
@@ -62,10 +62,22 @@ import { ProductService } from "../infrastructure/driven-adapters/products/produ
 import { ProductsController } from "../infrastructure/entry-points/products/product-controller";
 import { SaveproductUsecase } from "../domain/usecases/products/save-products.usecase";
 import { GetproductUsecase } from "../domain/usecases/products/get-products.usecase";
-import {GetproductBycodeUsecase} from "../domain/usecases/products/get-product-by-code"
-import { GetproductBynameUsecase } from "../domain/usecases/products/get-product-by-name";
-import { DeleteProductUsecase } from "../domain/usecases/products/delete-product-bycode";
+import {GetproductBycodeUsecase} from "../domain/usecases/products/get-product-by-code.usecase"
+import { GetproductBynameUsecase } from "../domain/usecases/products/get-product-by-name.usecase";
+import { DeleteProductUsecase } from "../domain/usecases/products/delete-product-bycode.usecase";
 import { UpdateProductUsecase } from "../domain/usecases/products/update-product.usecase";
+
+
+// TEXTILE COLOR 
+import ColorGateway from "../domain/models/textilecolor/gateway/color.gateway";
+import { ColorService } from "../infrastructure/driven-adapters/textilecolor/color.service";
+import { ColorController } from "../infrastructure/entry-points/textilecolor/color-controller";
+import { SavecolorUsecase } from "../domain/usecases/textilecolor/save-color.usecase";
+
+
+
+
+
 
 export const container = new Container();
 //Customer
@@ -130,3 +142,11 @@ container.bind<GetproductBycodeUsecase>("GetproductBycodeUsecase").to( Getproduc
 container.bind<GetproductBynameUsecase>("GetproductBynameUsecase").to(GetproductBynameUsecase)
 container.bind<DeleteProductUsecase>("DeleteProductUsecase").to(DeleteProductUsecase);
 container.bind<UpdateProductUsecase>("UpdateProductUsecase").to(UpdateProductUsecase); 
+
+
+
+//Color 
+container.bind<ColorGateway>("ColorGateway").to(ColorService);
+container.bind<ColorController>("ColorController").to(ColorController);
+container.bind<SavecolorUsecase>("SavecolorUsecase").to(SavecolorUsecase);
+

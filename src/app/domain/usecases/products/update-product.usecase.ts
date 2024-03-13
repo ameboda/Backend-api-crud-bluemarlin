@@ -4,20 +4,19 @@ import ProductGateway from "../../models/products/gateway/products.gateway";
 
 @injectable()
 export class UpdateProductUsecase {
-    constructor(@inject("ProductGateway") private productGateway: ProductGateway) {}
-  
-    async invoke(obj: productModel): Promise<any> { 
-      try {
-        const updateResult = await this.productGateway.updateProduct(obj);
-  
-        //   resultados del update de Mongoose 
-        if (!updateResult.acknowledged) {
-          throw new Error('La actualización no se realizó'); 
-        }
-  
-        return { message: 'Producto actualizado con éxito' } ; 
-      } catch (error) {
-        throw error; 
-      }
+  constructor(
+    @inject("ProductGateway") private productGateWay: ProductGateway
+  ) {}
+   async invoke(param: productModel): Promise<productModel> {
+    let responseProductUseCase:any;
+    if(!param.codProduct){
+        param.codProduct = param.codProduct
     }
+    responseProductUseCase = await this.productGateWay.updateProduct(param);
+    if(!responseProductUseCase.nModified){
+      responseProductUseCase.error = 'No se ha actualizado la  informacion del producto';
+    }
+    return responseProductUseCase;
   }
+
+}

@@ -9,10 +9,10 @@ export class GetproductBynameUsecase {
   ) {}
    async invoke(name: string): Promise<productModel> {
     let responseProductUseCase:any;
-    responseProductUseCase = await this.productGateway.getBycode(name);
+    responseProductUseCase = await this.productGateway.getByname(name);
     if(!responseProductUseCase){
       responseProductUseCase = {
-        error: `No se ha encontrado registro del producto con el codigo : ${name}`
+        error: `No se ha encontrado registro del producto con el nombre : ${name}`
       }
     }
 

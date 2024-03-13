@@ -17,10 +17,10 @@ import {
 
 import { SaveproductUsecase } from "../../../domain/usecases/products/save-products.usecase";
 import { GetproductUsecase } from "../../../domain/usecases/products/get-products.usecase"; 
-import { GetproductBycodeUsecase  } from "../../../domain/usecases/products/get-product-by-code"; 
-import { GetproductBynameUsecase } from "../../../domain/usecases/products/get-product-by-name";
+import { GetproductBycodeUsecase  } from "../../../domain/usecases/products/get-product-by-code.usecase"; 
+import { GetproductBynameUsecase } from "../../../domain/usecases/products/get-product-by-name.usecase";
 import {  UpdateProductUsecase } from "../../../domain/usecases/products/update-product.usecase";
-import { DeleteProductUsecase } from "../../../domain/usecases/products/delete-product-bycode";
+import { DeleteProductUsecase } from "../../../domain/usecases/products/delete-product-bycode.usecase";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -133,13 +133,15 @@ export class ProductsController implements interfaces.Controller {
 
     // Obtener productos por cod-prod
 
-    @httpGet("/product/:product")
+    @httpGet("/code/:codProduct")
     async getproductBycode(
         @requestParam("codProduct") codProduct: string,
         @response() res: express.Response
     ) {
         try {
+            
             const getProductBycodeUsecase = await this.getproductBycodeUsecase.invoke(codProduct);
+        
             if (getProductBycodeUsecase.error) {
                 res
                     .status(status.OK)
@@ -178,7 +180,7 @@ export class ProductsController implements interfaces.Controller {
 
     // Obtener producto por nombre 
 
-    @httpGet("/product/:name")
+    @httpGet("/name/:name")
     async getproductByname(
         @requestParam("name") name: string,
         @response() res: express.Response
@@ -217,13 +219,14 @@ export class ProductsController implements interfaces.Controller {
 
    //ACTUALIZACION PRODUCTOS 
 
-   @httpPut("/") 
+   @httpPut("/code/:codProduct") 
    async updateProduct(
        @requestParam("codProduct") codProduct: string,
        @request() req: express.Request,
        @response() res: express.Response
    ) {
        try {
+            console.log('este es un mensaje para ver el :',codProduct)
            const param = req.body;
            const paramsAndproduct = { codProduct, ...param };
            const respondeUpdateProduct= await this.updateProductUsecase.invoke(paramsAndproduct);
@@ -275,7 +278,7 @@ export class ProductsController implements interfaces.Controller {
      if (!result) { // Maneja el caso donde no se eliminó
        res
          .status(status.NOT_FOUND)
-         .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, 'Producto  no encontrad'));
+         .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, 'Producto  no encontrado'));
        return; 
      }
 

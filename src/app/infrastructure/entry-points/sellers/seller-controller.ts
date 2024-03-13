@@ -20,7 +20,7 @@ import { GetsellerUsecase} from "../../../domain/usecases/SellersCase/get-seller
 import { GetsellerByccUsecase } from "../../../domain/usecases/SellersCase/get-seller-by-cc.usecase";
 import { GetsellerBynameUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-name.usecase";
 import { UpdateSellerUsecase } from "../../../domain/usecases/SellersCase/update-seller.usecase";
-import { GetSellerByemailUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-email";
+import { GetSellerByemailUsecase  } from "../../../domain/usecases/SellersCase/get-seller-by-email.usecase";
 import { DeleteSellerUsecase  } from "../../../domain/usecases/SellersCase/delete-seller-usecase";
 
 

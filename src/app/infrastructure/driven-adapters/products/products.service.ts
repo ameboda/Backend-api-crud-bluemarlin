@@ -60,17 +60,33 @@ async getBycode(codProduct: string) {
   return getBycodeResponseBd;  
 }
 
-
+//Get name for product
 async getByname(name: string) {
-  let getBycodeResponseBd: any = null;
+  let getBynameResponseBd: any = null;
   try {
-    getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(name, "i") }});
+    getBynameResponseBd = await product.findOne({ name: { $regex : new RegExp(name, "i") }});
   } catch (error) {
-    getBycodeResponseBd = {
+    getBynameResponseBd = {
       error: error,
     };
   }
-  return getBycodeResponseBd;  
+  return getBynameResponseBd;  
+}
+
+
+ // Actualizar Producto 
+ async updateProduct(obj: productModel) {
+  let updateProductResponseBd: any = null;
+  try {
+    const filter = { codProduct: obj.codProduct };
+    updateProductResponseBd= await product.updateOne(filter, obj);
+  } catch (error) {
+    updateProductResponseBd = {
+      error: error,
+    };
+  }
+  return updateProductResponseBd;
+  
 }
 
 
@@ -94,20 +110,7 @@ async getByname(name: string) {
 
 
 
- // Actualizar Producto 
- async updateProduct(obj: productModel) {
-  let updateProductResponseBd: any = null;
-  try {
-    const filter = { codProduct: obj.codProduct };
-    updateProductResponseBd= await product.updateOne(filter, obj);
-  } catch (error) {
-    updateProductResponseBd = {
-      error: error,
-    };
-  }
-  return updateProductResponseBd;
-  
-}
+
 
 
 }

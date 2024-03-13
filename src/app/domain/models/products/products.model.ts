@@ -1,4 +1,4 @@
-import { Document, model, ObjectId, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 
 export interface productModel extends Document {
   [X: string]: any;
@@ -12,7 +12,7 @@ export interface productModel extends Document {
     quantity: number;
     color: {
       objectid: string;
-      nombre: string;}; 
+      name: string;}; 
   }[];
   creationdate: Date;
 }
@@ -23,7 +23,7 @@ const productSchema = new Schema({
     required: true,
     // unique: true,
   },
-  nombre: {
+  name: {
     type: String,
     required: true,
   },
@@ -42,7 +42,7 @@ const productSchema = new Schema({
         quantity: { type: Number },
         color: {
           objectid: { type: String },
-          nombre: { type: String },
+          name: { type: String },
         }
       },
     ],

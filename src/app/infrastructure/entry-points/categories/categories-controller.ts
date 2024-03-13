@@ -18,9 +18,9 @@ import {
 import { SavecategoriesUsecase} from "../../../domain/usecases/categories/save-categories.usecase";
 import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
 import { GetcategoriesUsecase } from "../../../domain/usecases/categories/get-categories.usecase";
-import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name";
-import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categories/get-categories-byID";
-import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name";
+import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name.usecase";
+import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categories/get-categories-byID.usecase";
+import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name.usecase";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
