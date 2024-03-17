@@ -31,34 +31,49 @@ export class ColorService extends ColorGateway {
     return responseBd;
   }
 
-//retorno de productos
+//retorno de colores
 
-// async get(): Promise<productModel> {
-//   let getResponseBd: any = null;
-//   try {
-//     getResponseBd = await product.find().populate("Categories");
-//   } catch (error) {
-//     getResponseBd = {
-//       error: error,
-//     };
-//   }
-//   return getResponseBd;
-// }
+async get(): Promise<colorModel> {
+  let getResponseBd: any = null;
+  try {
+    getResponseBd = await color.find(); 
+  } catch (error) {
+    getResponseBd = {
+      error: error,
+    };
+  }
+  return getResponseBd;
+}
+
+// Get name for color
+
+async getByname(name: string) {
+  let getBynameResponseBd: any = null;
+  try {
+    getBynameResponseBd = await color.findOne({ name: { $regex : new RegExp(name, "i") }});
+  } catch (error) {
+    getBynameResponseBd = {
+      error: error,
+    };
+  }
+  return getBynameResponseBd;  
+}
 
 
-// async getByname(name: string) {
-//   let getBycodeResponseBd: any = null;
-//   try {
-//     getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(name, "i") }});
-//   } catch (error) {
-//     getBycodeResponseBd = {
-//       error: error,
-//     };
-//   }
-//   return getBycodeResponseBd;  
-// }
+// Update color by Id 
 
-
+async updateById(obj: colorModel): Promise<colorModel> {
+  let updateProductResponseBd: any = null;
+  try {
+    const filter = { id: obj._id }; 
+    updateProductResponseBd = await color.updateOne(filter, obj);
+  } catch (error) {
+    updateProductResponseBd = {
+      error: error,
+    };
+  }
+  return updateProductResponseBd;
+}
 
 }
 

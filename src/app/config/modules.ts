@@ -73,7 +73,9 @@ import ColorGateway from "../domain/models/textilecolor/gateway/color.gateway";
 import { ColorService } from "../infrastructure/driven-adapters/textilecolor/color.service";
 import { ColorController } from "../infrastructure/entry-points/textilecolor/color-controller";
 import { SavecolorUsecase } from "../domain/usecases/textilecolor/save-color.usecase";
-
+import { GetcolorUsecase} from "../domain/usecases/textilecolor/get-color.usecase";
+import { GetcolorBynameUsecase } from "../domain/usecases/textilecolor/get-color-byname.usecase";
+import { UpdateColorUsecase } from "../domain/usecases/textilecolor/update-color.usecase";
 
 
 
@@ -149,4 +151,6 @@ container.bind<UpdateProductUsecase>("UpdateProductUsecase").to(UpdateProductUse
 container.bind<ColorGateway>("ColorGateway").to(ColorService);
 container.bind<ColorController>("ColorController").to(ColorController);
 container.bind<SavecolorUsecase>("SavecolorUsecase").to(SavecolorUsecase);
-
+container.bind<GetcolorUsecase>("GetcolorUsecase").to(GetcolorUsecase);
+container.bind<GetcolorBynameUsecase>("GetcolorBynameUsecase").to(GetcolorBynameUsecase);
+container.bind<UpdateColorUsecase>("UpdateColorUsecase").to(UpdateColorUsecase); 
