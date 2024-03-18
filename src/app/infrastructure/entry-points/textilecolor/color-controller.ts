@@ -10,6 +10,7 @@ import {
     interfaces,
     params,
     request,
+    requestBody,
     requestParam,
     response,
 } from "inversify-express-utils";
@@ -18,8 +19,9 @@ import {
  import { SavecolorUsecase  } from "../../../domain/usecases/textilecolor/save-color.usecase";
  import { GetcolorUsecase } from "../../../domain/usecases/textilecolor/get-color.usecase"; 
  import { GetcolorBynameUsecase } from "../../../domain/usecases/textilecolor/get-color-byname.usecase";
- import { UpdateColorUsecase } from "../../../domain/usecases/textilecolor/update-color.usecase";
-
+ import { UpdateColorByIdUsecase } from "../../../domain/usecases/textilecolor/update-color.usecase";
+ import { GetColorByIdtUsecase } from "../../../domain/usecases/textilecolor/get-color-ById.usecase";
+ import { DeleteColorUsecase } from "../../../domain/usecases/textilecolor/delete-color-byId.usecase";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -30,6 +32,9 @@ import {
     NOTIFICATION_STATUS_422,
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
+import { ObjectId, Types } from "mongoose";
+import { colorModel } from "../../../domain/models/textilecolor/color.model";
+import ColorGateway from "../../../domain/models/textilecolor/gateway/color.gateway";
 
 
 
@@ -45,9 +50,14 @@ export class ColorController implements interfaces.Controller {
         private getcolorUsecase: GetcolorUsecase,
         @inject("GetcolorBynameUsecase")
         private getcolorBynameUsecase: GetcolorBynameUsecase,
-        @inject("UpdateColorUsecase")
-        private updateColorUsecase: UpdateColorUsecase
-       
+        @inject("UpdateColorByIdUsecase")
+        private updateColorByIdUsecase: UpdateColorByIdUsecase,
+        @inject("ColorGateway") // Inyectar el ColorGateway
+        private colorGateway: ColorGateway ,
+        @inject("GetColorByIdtUsecase")
+        private getColorByIdtUsecase: GetColorByIdtUsecase,
+        @inject("DeleteColorUsecase")
+        private deleteColorUsecase: DeleteColorUsecase
     ) { }
 
 
@@ -166,81 +176,94 @@ export class ColorController implements interfaces.Controller {
         }
     }
 
+
 //    Update Color
 
-   @httpPut("/id/:id") 
-   async updateColor(
-       @requestParam("id") _id: string,
-       @request() req: express.Request,
-       @response() res: express.Response
-   ) {
-        console.log('este mensaje id:', _id)
-       try {
-           const param = req.body;
-           const paramsAndcolor = { _id, ...param };
-           const respondeUpdateColor= await this.updateColorUsecase.invoke(paramsAndcolor);
+@httpPut("/color/:id/")
+async updateById(
+  @requestParam("id") id: string,
+  @requestBody() colorData: Partial<colorModel>,
+  @response() res: express.Response
+) {
+  try {
+    const objectId = new Types.ObjectId(id);
+    const updateColorUsecase = new UpdateColorByIdUsecase(this.colorGateway); // Pasar el ColorGateway
+    const updatedColor = await updateColorUsecase.invoke(objectId, colorData);
 
-           if (respondeUpdateColor.error) {
-               res
-                   .status(status.OK)
-                   .send(
-                       NotificationEnvelope.build(
-                           "Color",
-                           NOTIFICATION_STATUS_404,
-                           respondeUpdateColor.error
-                       )
-                   );
-           } else {
-               res
-                   .status(status.OK)
-                   .send(
-                       NotificationEnvelope.build(
-                           "Color",
-                           NOTIFICATION_STATUS_200,
-                           respondeUpdateColor
-                       )
-                   );
-           }
-       } catch (error) {
-           res
-               .status(status.INTERNAL_SERVER_ERROR)
-               .send(
-                   NotificationEnvelope.build(
-                       "Color",
-                       NOTIFICATION_STATUS_500,
-                       error
-                   )
-               );
-       }
-   }
+    res.status(status.OK).send(
+      NotificationEnvelope.build("Color", NOTIFICATION_STATUS_200, updatedColor)
+    );
+  } catch (error) {
+    if (error.name === "CastError") {
+      res.status(status.BAD_REQUEST).send(
+        NotificationEnvelope.build(
+          "Color",
+          NOTIFICATION_STATUS_400,
+          "El ID proporcionado no es válido"
+        )
+      );
+    } else if (error.message.includes("no encontrado")) {
+      res.status(status.NOT_FOUND).send(
+        NotificationEnvelope.build(
+          "Color",
+          NOTIFICATION_STATUS_404,
+          error.message
+        )
+      );
+    } else {
+      res.status(status.INTERNAL_SERVER_ERROR).send(
+        NotificationEnvelope.build("Color", NOTIFICATION_STATUS_500, error)
+      );
+    }
+  }
+}
  
 //  //Delete Productos
  
 
-//  @httpDelete("/:name")
-//  async deleteProductByName(
-//    @requestParam("codProduct") codProduct: string,
-//    @response() res: express.Response
-//  ) {
-//    try {
-//      const result = await this.deleteProductUsecase.invoke(codProduct);
+@httpDelete("/:id") // Cambiar a parámetro de ruta
+  async deleteById(
+    @requestParam("id") id: string, // Parámetro de ruta como string
+    @response() res: express.Response
+  ) {
+    try {
+      const objectId = new Types.ObjectId(id); // Convertir a ObjectId
 
-//      if (!result) { // Maneja el caso donde no se eliminó
-//        res
-//          .status(status.NOT_FOUND)
-//          .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, 'Producto  no encontrad'));
-//        return; 
-//      }
+      const deleteResult = await this.deleteColorUsecase.invoke(objectId);
 
-//      res
-//        .status(status.OK)
-//        .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_200, 'Producto eliminado exitosamente'));
-//    } catch (error) {
-//      res
-//        .status(status.INTERNAL_SERVER_ERROR)
-//        .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error));
-//    }
-//  }
+      if (deleteResult === false) { // Simplificar la lógica del error
+        res.status(status.NOT_FOUND).send(
+          NotificationEnvelope.build(
+            "Color",
+            NOTIFICATION_STATUS_404,
+            `No se encontró el color con el ID ${id}`
+          )
+        );
+      } else {
+        res.status(status.OK).send(
+          NotificationEnvelope.build(
+            "Color",
+            NOTIFICATION_STATUS_200,
+            "Color eliminado correctamente" // Respuesta genérica
+          )
+        );
+      }
+    } catch (error) {
+      if (error.name === 'CastError') { // Manejar error de formato de ID
+        res.status(status.BAD_REQUEST).send(
+          NotificationEnvelope.build(
+            "Color",
+            NOTIFICATION_STATUS_400, // Usar un código 400
+            'El ID proporcionado no es válido'
+          )
+        );
+      } else {
+        res.status(status.INTERNAL_SERVER_ERROR).send(
+          NotificationEnvelope.build("Color", NOTIFICATION_STATUS_500, error)
+        );
+      }
+    }
+  }
 
 
 }

@@ -75,9 +75,9 @@ import { ColorController } from "../infrastructure/entry-points/textilecolor/col
 import { SavecolorUsecase } from "../domain/usecases/textilecolor/save-color.usecase";
 import { GetcolorUsecase} from "../domain/usecases/textilecolor/get-color.usecase";
 import { GetcolorBynameUsecase } from "../domain/usecases/textilecolor/get-color-byname.usecase";
-import { UpdateColorUsecase } from "../domain/usecases/textilecolor/update-color.usecase";
-
-
+import { UpdateColorByIdUsecase } from "../domain/usecases/textilecolor/update-color.usecase";
+import { GetColorByIdtUsecase } from "../domain/usecases/textilecolor/get-color-ById.usecase";
+import { DeleteColorUsecase} from "../domain/usecases/textilecolor/delete-color-byId.usecase"
 
 
 
@@ -153,4 +153,6 @@ container.bind<ColorController>("ColorController").to(ColorController);
 container.bind<SavecolorUsecase>("SavecolorUsecase").to(SavecolorUsecase);
 container.bind<GetcolorUsecase>("GetcolorUsecase").to(GetcolorUsecase);
 container.bind<GetcolorBynameUsecase>("GetcolorBynameUsecase").to(GetcolorBynameUsecase);
-container.bind<UpdateColorUsecase>("UpdateColorUsecase").to(UpdateColorUsecase); 
+container.bind<UpdateColorByIdUsecase>("UpdateColorByIdUsecase").to(UpdateColorByIdUsecase); 
+container.bind<GetColorByIdtUsecase>("GetColorByIdtUsecase").to(GetColorByIdtUsecase)
+container.bind<DeleteColorUsecase>("DeleteColorUsecase").to(DeleteColorUsecase);

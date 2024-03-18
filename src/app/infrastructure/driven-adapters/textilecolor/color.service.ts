@@ -3,6 +3,8 @@ import color, {
     colorModel,
 } from "../../../domain/models/textilecolor/color.model";
 import ColorGateway from "../../../domain/models/textilecolor/gateway/color.gateway";
+import { ObjectId, Types } from "mongoose";
+import ColorModel from "../../../domain/models/textilecolor/color.model";
 
 
 
@@ -45,6 +47,7 @@ async get(): Promise<colorModel> {
   return getResponseBd;
 }
 
+
 // Get name for color
 
 async getByname(name: string) {
@@ -62,17 +65,24 @@ async getByname(name: string) {
 
 // Update color by Id 
 
-async updateById(obj: colorModel): Promise<colorModel> {
-  let updateProductResponseBd: any = null;
+async updateById(id: Types.ObjectId, colorData: Partial<colorModel>): Promise<colorModel> {
+  return await ColorModel.findByIdAndUpdate(id, colorData, { new: true });
+}
+
+
+//Delete By Id
+
+ async getById(_id: Types.ObjectId): Promise<colorModel> {
+  return await ColorModel.findById(_id);
+}
+ async deleteById(_id: Types.ObjectId): Promise<boolean> {
   try {
-    const filter = { id: obj._id }; 
-    updateProductResponseBd = await color.updateOne(filter, obj);
+    await ColorModel.deleteOne({ _id });
+    return true;
   } catch (error) {
-    updateProductResponseBd = {
-      error: error,
-    };
+    console.error("Error eliminando color: ", error);
+    return false;
   }
-  return updateProductResponseBd;
 }
 
 }
