@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import CategoriesGateway from "../../models/categories/gateway/categories.gateway";
-import { categoriesModel } from "../../../domain/models/categories/categories.model";
+import CategoriesGateway from "../../models/categoriesClothing/gateway/categories.gateway";
+import { categoriesModel } from "../../models/categoriesClothing/categories.model";
 
 @injectable()
 export class SavecategoriesUsecase {

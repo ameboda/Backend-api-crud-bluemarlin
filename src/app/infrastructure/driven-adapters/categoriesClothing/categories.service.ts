@@ -1,9 +1,9 @@
 import { id, injectable } from "inversify";
 import categories, {
   categoriesModel,
-} from "../../../domain/models/categories/categories.model";
-import CategoriesGateway  from "../../../domain/models/categories/gateway/categories.gateway";
-import CategoriesModel from "../../../domain/models/categories/categories.model";
+} from "../../../domain/models/categoriesClothing/categories.model";
+import CategoriesGateway  from "../../../domain/models/categoriesClothing/gateway/categories.gateway";
+import CategoriesModel from "../../../domain/models/categoriesClothing/categories.model";
 
 
 @injectable()

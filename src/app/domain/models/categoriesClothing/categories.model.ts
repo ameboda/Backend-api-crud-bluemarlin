@@ -15,7 +15,7 @@ export interface categoriesModel extends Document {
     dateCreate: { type: Date, default: Date.now },
   });
 
-const CategoriesModel = model<categoriesModel>("Categories", categoriesSchema); 
+const CategoriesModel = model<categoriesModel>("Categories product", categoriesSchema); 
 
 export default CategoriesModel;
 

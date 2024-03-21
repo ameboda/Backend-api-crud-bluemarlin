@@ -15,12 +15,12 @@ import {
 } from "inversify-express-utils";
 
 
-import { SavecategoriesUsecase} from "../../../domain/usecases/categories/save-categories.usecase";
-import { UpdateCategoriesUsecase } from "../../../domain/usecases/categories/update-categories.usecase";
-import { GetcategoriesUsecase } from "../../../domain/usecases/categories/get-categories.usecase";
-import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categories/get-categories-by-name.usecase";
-import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categories/get-categories-byID.usecase";
-import { DeleteCategoriesUsecase} from "../../../domain/usecases/categories/delete-categories-by-name.usecase";
+import { SavecategoriesUsecase} from "../../../domain/usecases/categoriesClothing/save-categories.usecase";
+import { UpdateCategoriesUsecase } from "../../../domain/usecases/categoriesClothing/update-categories.usecase";
+import { GetcategoriesUsecase } from "../../../domain/usecases/categoriesClothing/get-categories.usecase";
+import { GetCategoriesBynameUsecase } from "../../../domain/usecases/categoriesClothing/get-categories-by-name.usecase";
+import { GetcategoriesByIDUsecase } from "../../../domain/usecases/categoriesClothing/get-categories-byID.usecase";
+import { DeleteCategoriesUsecase} from "../../../domain/usecases/categoriesClothing/delete-categories-by-name.usecase";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
