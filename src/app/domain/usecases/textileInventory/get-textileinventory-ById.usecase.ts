@@ -3,14 +3,13 @@ import TextileInventoryGateway from "../../models/textileInventory/gateway/texti
 import { textileInventoryModel } from "../../models/textileInventory/textile.inventory.model";
 import { Types } from "mongoose";
 
-
 @injectable()
 export class GetTextileInventoryByIdtUsecase {
   constructor(
     @inject("TextileInventoryGateway") private textileInventoryGateway: TextileInventoryGateway
   ) { }
 
-  async invoke(_id: Types.ObjectId): Promise<textileInventoryModel> {
+  async invoke(_id: Types.ObjectId): Promise<textileInventoryModel | null> { // Note el cambio de tipo
     const textileInventory = await this.textileInventoryGateway.getById(_id);
 
     if (!textileInventory) {

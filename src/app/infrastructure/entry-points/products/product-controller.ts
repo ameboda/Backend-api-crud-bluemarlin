@@ -19,8 +19,10 @@ import { SaveproductUsecase } from "../../../domain/usecases/products/save-produ
 import { GetproductUsecase } from "../../../domain/usecases/products/get-products.usecase"; 
 import { GetproductBycodeUsecase  } from "../../../domain/usecases/products/get-product-by-code.usecase"; 
 import { GetproductBynameUsecase } from "../../../domain/usecases/products/get-product-by-name.usecase";
-import {  UpdateProductUsecase } from "../../../domain/usecases/products/update-product.usecase";
+import { UpdateProductUsecase } from "../../../domain/usecases/products/update-product.usecase";
 import { DeleteProductUsecase } from "../../../domain/usecases/products/delete-product-bycode.usecase";
+
+
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -31,6 +33,7 @@ import {
     NOTIFICATION_STATUS_422,
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
+import { Types } from "mongoose";
 
 
 
@@ -98,39 +101,38 @@ export class ProductsController implements interfaces.Controller {
      //Obtener Productos
 
      @httpGet("/")
-    async get(@response() res: express.Response) {
-        try {
-            const getproductUsecase = await this.getproductUsecase.invoke();
-            if (getproductUsecase.error) {
-                res
-                    .status(status.OK)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Products",
-                            NOTIFICATION_STATUS_400,
-                            getproductUsecase.error
-                        )
-                    );
-            } else {
-                res
-                    .status(status.OK)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Products",
-                            NOTIFICATION_STATUS_200,
-                            getproductUsecase
-                        )
-                    );
-            }
-        } catch (error) {
-            res
-                .status(status.INTERNAL_SERVER_ERROR)
-                .send(
-                    NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error)
-                );
-        }
-    }
-
+     async get(@response() res: express.Response) {
+         try {
+             const getProductsUsecase = await this.getproductUsecase.invoke();
+             if (getProductsUsecase.error) {
+                 res
+                     .status(status.OK)
+                     .send(
+                         NotificationEnvelope.build(
+                             "Products",
+                             NOTIFICATION_STATUS_400,
+                             getProductsUsecase.error
+                         )
+                     );
+             } else {
+                 res
+                     .status(status.OK)
+                     .send(
+                         NotificationEnvelope.build(
+                             "Products",
+                             NOTIFICATION_STATUS_200,
+                             getProductsUsecase
+                         )
+                     );
+             }
+         } catch (error) {
+             res
+                 .status(status.INTERNAL_SERVER_ERROR)
+                 .send(
+                     NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error)
+                 );
+         }
+     }
     // Obtener productos por cod-prod
 
     @httpGet("/code/:codProduct")
@@ -260,30 +262,25 @@ export class ProductsController implements interfaces.Controller {
  //Delete Productos
  
 
- @httpDelete("/:name")
- async deleteProductByName(
+ @httpDelete("/:codProduct")
+ async deleteProductByCode(
    @requestParam("codProduct") codProduct: string,
    @response() res: express.Response
  ) {
    try {
-     const result = await this.deleteProductUsecase.invoke(codProduct);
+     const wasDeleted = await this.deleteProductUsecase.invoke(codProduct);
 
-     if (!result) { // Maneja el caso donde no se eliminó
-       res
-         .status(status.NOT_FOUND)
-         .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, 'Producto  no encontrado'));
-       return; 
+     if (wasDeleted) {
+       return res.status(200).json({ message: 'Producto eliminado con éxito' });
+     } else {
+       return res.status(404).json({ message: 'Producto no encontrado' });
      }
-
-     res
-       .status(status.OK)
-       .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_200, 'Producto eliminado exitosamente'));
+     
    } catch (error) {
-     res
-       .status(status.INTERNAL_SERVER_ERROR)
-       .send(NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error));
+     console.error("Error al eliminar producto", error);
+     return res.status(500).json({ message: 'Error interno del servidor' }); 
    }
  }
-
-
 }
+
+

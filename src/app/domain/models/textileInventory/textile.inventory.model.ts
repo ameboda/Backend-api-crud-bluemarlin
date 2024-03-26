@@ -24,7 +24,7 @@ const textileinventorySchema= new Schema({
     }, 
     category:{
         type: Schema.Types.ObjectId,
-        ref: "Categories Textile"
+        ref: "CategoriesTextile"
         
     }, 
     color : {

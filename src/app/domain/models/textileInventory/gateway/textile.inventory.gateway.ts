@@ -14,4 +14,7 @@ abstract class TextileInventoryGateway{
     
 }
 
+
 export default TextileInventoryGateway; 
+
+

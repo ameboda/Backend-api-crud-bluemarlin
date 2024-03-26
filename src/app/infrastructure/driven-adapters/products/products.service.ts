@@ -5,6 +5,9 @@ import product, {
 import ProductGateway from "../../../domain/models/products/gateway/products.gateway";
 import ProductModel from "../../../domain/models/products/products.model";
 
+
+
+
 @injectable()
 export class ProductService extends ProductGateway {
   async save(obj: productModel): Promise<productModel> {
@@ -30,8 +33,11 @@ export class ProductService extends ProductGateway {
 
 async get(): Promise<productModel> {
   let getResponseBd: any = null;
+  
   try {
-    getResponseBd = await product.find().populate("Categories");
+    getResponseBd = await product.find()
+    .populate("category")
+    .populate("size.color");
   } catch (error) {
     getResponseBd = {
       error: error,
@@ -46,7 +52,9 @@ async get(): Promise<productModel> {
 async getBycode(codProduct: string) {
   let getBycodeResponseBd: any = null;
   try {
-    getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(codProduct, "i") }});
+    getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(codProduct, "i") }})
+    .populate("category")
+    .populate("size.color");
   } catch (error) {
     getBycodeResponseBd = {
       error: error,
@@ -59,7 +67,9 @@ async getBycode(codProduct: string) {
 async getByname(name: string) {
   let getBynameResponseBd: any = null;
   try {
-    getBynameResponseBd = await product.findOne({ name: { $regex : new RegExp(name, "i") }});
+    getBynameResponseBd = await product.findOne({ name: { $regex : new RegExp(name, "i") }})
+    .populate("category")
+    .populate("size.color");
   } catch (error) {
     getBynameResponseBd = {
       error: error,
@@ -88,28 +98,24 @@ async getByname(name: string) {
 
  // borrar categoria con metodo delete 
  
- async deleteBycode(codProduct: String): Promise<productModel> {
+ async deleteByCode(codProduct: string): Promise<boolean> {
   try {
-    const deletedProduct = await ProductModel.findOneAndDelete({ CodProd: codProduct }); 
-
-    if (!deletedProduct) {
-      throw new Error('Producto no encontrado');
-    } 
-
-    return deletedProduct; // Retorna el producto eliminado
-
+    const deleteResult = await ProductModel.deleteOne({ codProduct });
+    return deleteResult.deletedCount > 0;
   } catch (error) {
-    console.error('Error eliminando Producto: ', error);
-    throw error; // Relanza el error para su manejo apropiado
+    console.error("Error al eliminar el producto:", error);
+    throw error;
   }
 }
 
 
-
-
-
-
 }
+
+
+
+
+
+
 
 
 

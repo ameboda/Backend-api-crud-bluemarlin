@@ -68,11 +68,18 @@ export class TextileInventoryService extends TextileInventoryGateway {
 
 
 
-  //Borrar Tela por Id 
-
-  async getById(_id: Types.ObjectId): Promise<textileInventoryModel> {
-    return await TextileInventoryModel.findById(_id);
+// encontrar tela por id 
+  async getById(_id: Types.ObjectId): Promise<textileInventoryModel | null> {
+    const textile = await TextileInventoryModel.findById(_id);
+  
+    if (!textile) {
+      throw new Error(`No se encontró la tela con ID: ${_id}`);
+    }
+  
+    return textile;
   }
+
+    //Borrar Tela por Id 
   async deleteById(_id: Types.ObjectId): Promise<boolean> {
     try {
       await TextileInventoryModel.deleteOne({ _id });

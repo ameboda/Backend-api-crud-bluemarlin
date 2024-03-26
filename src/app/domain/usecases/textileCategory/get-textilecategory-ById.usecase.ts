@@ -23,7 +23,7 @@ export class GetCategoryrByIdtUsecase {
 export class DeleteCategoryByIdUsecase {
   constructor(
     @inject("CategoriesTextileGateway") private categoriesTextileGateway: CategoriesTextileGateway
-  ) {}
+  ) { }
 
   async invoke(_id: Types.ObjectId): Promise<boolean> {
     return await this.categoriesTextileGateway.deleteById(_id);

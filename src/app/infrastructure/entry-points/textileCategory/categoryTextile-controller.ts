@@ -234,15 +234,15 @@ async updateById(
       if (deleteResult === false) { // Simplificar la lógica del error
         res.status(status.NOT_FOUND).send(
           NotificationEnvelope.build(
-            "Category",
+            "TextileCategory",
             NOTIFICATION_STATUS_404,
-            `No se encontró la Category con el ID ${id}`
+            `No se encontró la categoria con el ID ${id}`
           )
         );
       } else {
         res.status(status.OK).send(
           NotificationEnvelope.build(
-            "Category",
+            "TextileCategory",
             NOTIFICATION_STATUS_200,
             "Categoria eliminada correctamente" // Respuesta genérica
           )
@@ -252,18 +252,19 @@ async updateById(
       if (error.name === 'CastError') { // Manejar error de formato de ID
         res.status(status.BAD_REQUEST).send(
           NotificationEnvelope.build(
-            "Category",
+            "TextileCategory",
             NOTIFICATION_STATUS_400, // Usar un código 400
             'El ID proporcionado no es válido'
           )
         );
       } else {
         res.status(status.INTERNAL_SERVER_ERROR).send(
-          NotificationEnvelope.build("Category", NOTIFICATION_STATUS_500, error)
+          NotificationEnvelope.build("TextileCategory", NOTIFICATION_STATUS_500, error)
         );
       }
     }
   }
+
 
 
 }

@@ -19,6 +19,6 @@ export interface categoriestextileModel extends Document {
     },
   });
 
-const CategoriesTextileModel = model<categoriestextileModel >("Categories Textile", categoriesTextileSchema); 
+const CategoriesTextileModel = model<categoriestextileModel >("CategoriesTextile", categoriesTextileSchema); 
 
 export default CategoriesTextileModel;

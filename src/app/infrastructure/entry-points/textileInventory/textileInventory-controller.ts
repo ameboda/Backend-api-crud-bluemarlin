@@ -136,6 +136,37 @@ export class TextileInventoryController implements interfaces.Controller {
         }
     }
 
+// Obtener telas por Id 
+
+@httpGet("/:id")
+    async getById(@requestParam("id") id: Types.ObjectId, @response() res: express.Response) {
+      try {
+        const idTextile = await this.getTextileInventoryByIdtUsecase.invoke(id); 
+    
+        if (!idTextile) {
+          return res
+            .status(status.NOT_FOUND)
+            .send('Tela no encontrada'); 
+        }
+    
+        return res
+          .status(status.OK)
+          .send(idTextile);
+    
+      } catch(error) {
+        // Manejo de errores específicos
+        if (error.name === "CastError") {
+            // Respuestas HTTP usan 'statusCode' para el código de estado
+            return res.status(400).json({ error: `El ID proporcionado no existe o no es válido: ${id}` }); 
+        } else { 
+            // Registrar el error y emitir respuesta genérica
+            console.error(error.message);
+            return res.status(500).json({ error: "Error interno del servidor" });
+        }
+    }
+    }
+
+
 
 //   Obtener Telas por nombre 
 
@@ -186,7 +217,6 @@ async updateById(
   @response() res: express.Response
 ) {
   try {
-    console.log('veamos si esta shet hace algo', id)
     const objectId = new Types.ObjectId(id);
     const updateTextileInventoryUsecase= new UpdateTextileInventoryByIdUsecase(this.textileInventoryGateway); 
     const updatedTextileInventory = await updateTextileInventoryUsecase.invoke(objectId, inventoryData);

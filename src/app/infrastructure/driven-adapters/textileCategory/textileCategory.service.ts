@@ -70,11 +70,20 @@ async updateById(id: Types.ObjectId, categoryData: Partial<categoriestextileMode
 }
 
 
+//get ById
+
+async getById(_id: Types.ObjectId): Promise<categoriestextileModel | null> {
+  const category = await CategoriesTextileModel.findById(_id);
+
+  if (!category) {
+    throw new Error(`No se encontró la categoria con ID: ${_id}`);
+  }
+
+  return category;
+}
+
 //Delete By Id
 
- async getById(_id: Types.ObjectId): Promise<categoriestextileModel> {
-  return await CategoriesTextileModel.findById(_id);
-}
  async deleteById(_id: Types.ObjectId): Promise<boolean> {
   try {
     await CategoriesTextileModel.deleteOne({ _id });

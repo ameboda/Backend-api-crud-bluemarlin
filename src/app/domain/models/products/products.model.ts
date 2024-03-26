@@ -1,18 +1,17 @@
-import { Document, model, Schema } from "mongoose";
+import { Document, model, Schema, Types } from "mongoose";
 
 export interface productModel extends Document {
   [X: string]: any;
   error: any;
+  _id: Types.ObjectId;
   codProduct: string;
   name: string;
-  categories: string;
+  category: Types.ObjectId;
   size: {
     nameLetter: string;
     nameNumber: number;
     quantity: number;
-    color: {
-      objectid: string;
-      name: string;}; 
+    color: Types.ObjectId;
   }[];
   creationdate: Date;
 }
@@ -28,10 +27,9 @@ const productSchema = new Schema({
     required: true,
   },
 
-  categories: {
+  category: {
     type: Schema.Types.ObjectId,
-    ref: "Categories product",
-    required: true,
+    ref: "CategoriesProduct"
   },
 
   size: {
@@ -41,8 +39,9 @@ const productSchema = new Schema({
         nameNumber: { type: Number },
         quantity: { type: Number },
         color: {
-          objectid: { type: String },
-          name: { type: String },
+          type: Schema.Types.ObjectId,
+          ref: "colors",
+          required: true
         }
       },
     ],
@@ -58,3 +57,7 @@ const productSchema = new Schema({
 const ProductModel = model<productModel>("Products", productSchema);
 
 export default ProductModel;
+
+
+
+ 

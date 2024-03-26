@@ -12,7 +12,7 @@ export class GetCategoriesBynameUsecase {
     responseCategoriesUseCase = await this.categoriesGateway.getByname(categories);
     if(!responseCategoriesUseCase){
         responseCategoriesUseCase = {
-        error: `No se ha encontrado registro para el email ${categories}`
+        error: `No se ha encontrado registro para la categoria ${categories}`
       }
     }
     return responseCategoriesUseCase;

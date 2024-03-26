@@ -7,29 +7,15 @@ export class DeleteProductUsecase {
   constructor(
     @inject("ProductGateway") private productGateway: ProductGateway
   ) {}
-  async invoke(param: any): Promise<any> { // Especifica el tipo de parámetro y el tipo de retorno
 
-    
-    // logica de borrado '
+  async invoke(codProduct: string): Promise<boolean> { 
     try {
-      //1. se trae la categoriade la base de datos 
-      let product= await this.productGateway.getBycode(param);
+      const wasDeleted = await this.productGateway.deleteByCode(codProduct);
+      return wasDeleted; 
 
-      if(!product){
-        throw new Error('Producto no encontrado ')
-      }
-
-      //2. se elimina el vendedor obtenido 
-      await this.productGateway.deleteBycode(param); 
-
-      //3. manejar el error si no se puede eliminar 
-      return true ; 
     } catch (error) {
-
-      console.error('Error al eliminar Producto', error); 
-      return false 
-      
+      console.error("Error al eliminar el producto:", error);
+      throw error; 
     }
-  }
-
+  } 
 } 

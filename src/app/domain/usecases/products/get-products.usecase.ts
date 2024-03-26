@@ -8,11 +8,11 @@ import { productModel } from "../../models/products/products.model";
 export class GetproductUsecase {
   constructor(
     @inject("ProductGateway") private productGateway: ProductGateway
-  ) {}
+  ) { }
   async invoke(): Promise<productModel> {
     const responseUserCase = await this.productGateway.get();
     return responseUserCase;
   }
-} 
+}
 
 

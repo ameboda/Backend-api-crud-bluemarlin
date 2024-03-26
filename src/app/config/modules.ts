@@ -67,7 +67,6 @@ import { GetproductBynameUsecase } from "../domain/usecases/products/get-product
 import { DeleteProductUsecase } from "../domain/usecases/products/delete-product-bycode.usecase";
 import { UpdateProductUsecase } from "../domain/usecases/products/update-product.usecase";
 
-
 // TEXTILE COLOR 
 import ColorGateway from "../domain/models/textilecolor/gateway/color.gateway";
 import { ColorService } from "../infrastructure/driven-adapters/textilecolor/color.service";
@@ -156,6 +155,7 @@ container.bind<GetcategoriesUsecase>("GetcategoriesUsecase").to(GetcategoriesUse
 container.bind<GetCategoriesBynameUsecase>("GetCategoriesBynameUsecase").to(GetCategoriesBynameUsecase);
 container.bind<GetcategoriesByIDUsecase>("GetcategoriesByIDUsecase").to(GetcategoriesByIDUsecase);
 container.bind<DeleteCategoriesUsecase>("DeleteCategoriesUsecase").to(DeleteCategoriesUsecase);
+
 
 
 

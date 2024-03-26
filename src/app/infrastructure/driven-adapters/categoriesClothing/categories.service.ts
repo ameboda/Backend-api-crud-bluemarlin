@@ -31,7 +31,7 @@ export class CategoriesService extends CategoriesGateway {
 async get(): Promise<categoriesModel> {
   let getResponseBd: any = null;
   try {
-    getResponseBd = await categories.find();
+    getResponseBd = await CategoriesModel.find();
   } catch (error) {
     getResponseBd = {
       error: error,
@@ -56,10 +56,10 @@ async get(): Promise<categoriesModel> {
 
 
 //retorno de Categoria por nombre 
-async getByname(categories: string) {
+async getByname(name: string) {
   let getBynameResponseBd: any = null;
   try {
-    getBynameResponseBd = await CategoriesModel.findOne({ categories: { $regex : new RegExp(categories, "i") }});
+    getBynameResponseBd = await CategoriesModel.findOne({ name: { $regex : new RegExp(name, "i") }});
   } catch (error) {
     getBynameResponseBd = {
       error: error,

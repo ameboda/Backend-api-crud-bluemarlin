@@ -3,6 +3,7 @@ import { productModel } from "../products.model"
 
 
 
+
 @injectable()
 abstract class ProductGateway{
 
@@ -10,8 +11,8 @@ abstract class ProductGateway{
     abstract get(): Promise<productModel>;
     abstract getBycode(codProduct: String): Promise<productModel>;
     abstract getByname(name: String): Promise<productModel>; 
-    abstract deleteBycode(codProduct: String): Promise<productModel>; 
-    abstract updateProduct(obj: productModel): Promise<productModel>; 
+    abstract deleteByCode(codProduct: string): Promise<boolean>;
+    abstract updateProduct(obj: productModel): Promise<productModel>;
 }
 
 export default ProductGateway ; 
