@@ -8,7 +8,7 @@ abstract class CustomerGateway {
   abstract getByCustomer(customer): Promise<ICustomerModel>;
   abstract get(): Promise<ICustomerModel>;
   abstract getByNit(nit): Promise<ICustomerModel>;
-  abstract updateByNit(obj): Promise<ICustomerModel>;
+  abstract updateByNit(nit: number, updates: Partial<ICustomerModel>): Promise<ICustomerModel | null>;
 }
 
 export default CustomerGateway;

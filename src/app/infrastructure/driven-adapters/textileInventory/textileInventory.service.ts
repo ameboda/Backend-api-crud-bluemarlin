@@ -36,7 +36,6 @@ export class TextileInventoryService extends TextileInventoryGateway {
     try {
       getResponseBd = await textileinventory.find()
         .populate('category')
-        .populate('color');
     } catch (error) {
       getResponseBd = {
         error: error,
@@ -51,7 +50,8 @@ export class TextileInventoryService extends TextileInventoryGateway {
   async getByname(name: string) {
     let getBynameResponseBd: any = null;
     try {
-      getBynameResponseBd = await textileinventory.findOne({ name: { $regex: new RegExp(name, "i") } });
+      getBynameResponseBd = await textileinventory.findOne({ name: { $regex: new RegExp(name, "i") } })
+      .populate('category')
     } catch (error) {
       getBynameResponseBd = {
         error: error,
@@ -70,12 +70,11 @@ export class TextileInventoryService extends TextileInventoryGateway {
 
 // encontrar tela por id 
   async getById(_id: Types.ObjectId): Promise<textileInventoryModel | null> {
-    const textile = await TextileInventoryModel.findById(_id);
-  
+    const textile = await TextileInventoryModel.findById(_id)
+    .populate('category')
     if (!textile) {
       throw new Error(`No se encontró la tela con ID: ${_id}`);
     }
-  
     return textile;
   }
 

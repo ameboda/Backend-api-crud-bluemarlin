@@ -38,18 +38,19 @@ export class CustomerService extends CustomerGateway {
     return getResponseBd;
   }
 
-  async updateByNit(obj: ICustomerModel) {
+  async updateByNit(nit: number, updates: Partial<ICustomerModel>) {
     let updateByNitResponseBd: any = null;
     try {
-      const filter = { nit: obj.currentNit };
-      updateByNitResponseBd = await Customer.updateOne(filter, obj);
+      const filter = { nit }; // Buscar por NIT
+      updateByNitResponseBd = await Customer.updateOne(filter, updates);
+ 
     } catch (error) {
       updateByNitResponseBd = {
         error: error,
       };
     }
     return updateByNitResponseBd;
-  }
+  } 
 
 
   async getByCustomer(name: string) {

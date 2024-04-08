@@ -174,7 +174,7 @@ export class CategoriesController implements interfaces.Controller {
 
        //Actualizacion Categories
 
-    @httpPut("/") 
+    @httpPut("/categories/:categories/") 
     async updateCategories(
         @requestParam("categories") categories: string,
         @request() req: express.Request,

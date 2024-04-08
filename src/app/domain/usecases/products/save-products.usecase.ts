@@ -14,10 +14,10 @@ export class SaveproductUsecase {
     
  
     // 1. Verificar si el producto ya existe
-    // const existingProduct = await this.productGateway.findByCode(param.codProduct); 
-    // if (existingProduct) {
-    //   throw new Error("El código de producto ya existe");
-    // }
+    const existingProduct = await this.productGateway.getBycode(param.codProduct); 
+    if (existingProduct) {
+      throw new Error("El código de producto ya existe");
+    }
 
 
 

@@ -10,8 +10,6 @@ export interface productModel extends Document {
   size: {
     nameLetter: string;
     nameNumber: number;
-    quantity: number;
-    color: Types.ObjectId;
   }[];
   creationdate: Date;
 }
@@ -37,13 +35,7 @@ const productSchema = new Schema({
       {
         nameLetter: { type: String },
         nameNumber: { type: Number },
-        quantity: { type: Number },
-        color: {
-          type: Schema.Types.ObjectId,
-          ref: "colors",
-          required: true
-        }
-      },
+        },
     ],
     default: [], // Define un valor inicial para el array como vacío
   },

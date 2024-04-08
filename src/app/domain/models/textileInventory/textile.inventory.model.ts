@@ -7,8 +7,7 @@ export interface textileInventoryModel extends Document {
 error: any; 
 _id: Types.ObjectId;
 name: string;
-category: Types.ObjectId; 
-color : Types.ObjectId; 
+category: Types.ObjectId;
 Width: number;
 stock: number; 
 creationDate: Date; 
@@ -27,11 +26,6 @@ const textileinventorySchema= new Schema({
         ref: "CategoriesTextile"
         
     }, 
-    color : {
-        type :Schema.Types.ObjectId,
-        ref:  "colors",
-        required: true
-    },
     Width:{
         type: Number,
         required: true

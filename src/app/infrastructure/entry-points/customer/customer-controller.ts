@@ -27,6 +27,7 @@ import {
     NOTIFICATION_STATUS_422,
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
+import { ICustomerModel } from "../../../domain/models/customer/customer.model";
 
 
 @controller("/customer")
@@ -191,49 +192,35 @@ export class CustomerController implements interfaces.Controller {
     }
 
     @httpPut("/:nit")
-    async updateCustomer(
-        @requestParam("nit") currentNit: string,
-        @request() req: express.Request,
-        @response() res: express.Response
-    ) {
-        try {
-            const param = req.body;
-            const paramsAndCurrentNit = { currentNit, ...param };
-            const respondeUpdateCustomer = await this.updateCustomerUsecase.invoke(paramsAndCurrentNit);
-            if (respondeUpdateCustomer.error) {
-                res
-                    .status(status.OK)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Customer",
-                            NOTIFICATION_STATUS_404,
-                            respondeUpdateCustomer.error
-                        )
-                    );
-            } else {
-                res
-                    .status(status.OK)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Customer",
-                            NOTIFICATION_STATUS_201,
-                            respondeUpdateCustomer
-                        )
-                    );
-            }
-        } catch (error) {
-            res
-                .status(status.INTERNAL_SERVER_ERROR)
-                .send(
-                    NotificationEnvelope.build(
-                        "Customer",
-                        NOTIFICATION_STATUS_500,
-                        error
-                    )
-                );
-        }
+  async updateByNit(
+    @requestParam("nit") nit: number,
+    @request() req: express.Request,
+    @response() res: express.Response
+  ) {
+    try {
+      const updatedCustomer = await this.updateCustomerUsecase.invoke(nit, req.body as ICustomerModel);
+
+      if (updatedCustomer) {
+        return res.status(status.OK).json({
+          message: "Cliente modificado con éxito",
+          data: updatedCustomer,
+        });
+      } else {
+        return res.status(status.NOT_FOUND).json({ 
+            message: `Cliente con NIT ${nit} no encontrado`
+        });
+      }
+    } catch (error) {
+      // Consider using a custom error handling middleware or strategy
+      return res.status(status.INTERNAL_SERVER_ERROR).json({
+        status: NOTIFICATION_STATUS_500,
+        message: "Error updating customer",
+        error: error.message, // Consider filtering sensitive information
+      });
     }
+  }
+}
+  
 
     
 
-}

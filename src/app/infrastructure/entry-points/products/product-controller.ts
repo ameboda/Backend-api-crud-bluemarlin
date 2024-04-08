@@ -34,6 +34,7 @@ import {
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
 import { Types } from "mongoose";
+import { productModel } from "../../../domain/models/products/products.model";
 
 
 
@@ -63,38 +64,56 @@ export class ProductsController implements interfaces.Controller {
 
     @httpPost("/")
     async saveProducts(req: express.Request, res: express.Response) {
-        try {
-            const callUsecaseProducts = await this.saveproductUsecase.invoke(
-                req.body,
-            );
-            if (callUsecaseProducts.error) {
-                res
-                    .status(NOTIFICATION_STATUS_422)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Products",
-                            NOTIFICATION_STATUS_422,
-                            callUsecaseProducts.error
-                        )
-                    );
-            } else {
-                res
-                    .status(status.CREATED)
-                    .send(
-                        NotificationEnvelope.build(
-                            "Products",
-                            NOTIFICATION_STATUS_201,
-                            callUsecaseProducts
-                        )
-                    );
-            }
-        } catch (error) {
+      try {
+        const callUsecaseProducts = await this.saveproductUsecase.invoke(req.body as productModel);
+    
+        if (callUsecaseProducts.error) {
+          if (callUsecaseProducts.error.message === "Product with this codProduct already exists") {
             res
-                .status(status.INTERNAL_SERVER_ERROR)
-                .send(
-                    NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error)
-                );
+              .status(409) // Código HTTP 409 Conflict
+              .send(
+                NotificationEnvelope.build(
+                  "Products",
+                  409,
+                  callUsecaseProducts.error.message
+                )
+              );
+          } else if (callUsecaseProducts.error.message === "Product not found") {
+            res
+              .status(status.NOT_FOUND) // Código HTTP 404 Not Found
+              .send(
+                NotificationEnvelope.build("Products", NOTIFICATION_STATUS_404, callUsecaseProducts.error.message)
+              );
+          } else {
+            res
+              .status(NOTIFICATION_STATUS_422)
+              .send(
+                NotificationEnvelope.build(
+                  "Products",
+                  NOTIFICATION_STATUS_422,
+                  callUsecaseProducts.error
+                )
+              );
+          }
+        } else {
+          res
+            .status(status.CREATED)
+            .send(
+              NotificationEnvelope.build(
+                "Products",
+                NOTIFICATION_STATUS_201,
+                callUsecaseProducts
+              )
+            );
         }
+      } catch (error) {
+        console.error("Error en saveProducts:", error); // Registra el error en la consola
+        res
+          .status(status.INTERNAL_SERVER_ERROR)
+          .send(
+            NotificationEnvelope.build("Products", NOTIFICATION_STATUS_500, error.message)
+          );
+      }
     }
 
 

@@ -11,22 +11,18 @@ import ProductModel from "../../../domain/models/products/products.model";
 @injectable()
 export class ProductService extends ProductGateway {
   async save(obj: productModel): Promise<productModel> {
-    const newProducts = new product(obj);
-    let responseBd: any = null;
     try {
-      responseBd = await newProducts.save();
+      const newProduct = new ProductModel(obj); // Usamos el modelo Mongoose directamente
+      const savedProduct = await newProduct.save();
+      return savedProduct;
     } catch (error) {
       if (error.name === "ValidationError") {
-        const errors: any = {};
-        Object.keys(error.errors).forEach((key) => {
-          errors[key] = error.errors[key].message;
-        });
-        responseBd = {
-          error: errors,
-        };
+        // ... Manejo de errores de validación (puedes reutilizar el tuyo)
+        throw new Error('Validation Error: ...'); // Recomendado lanzar un error personalizado
+      } else {
+        throw error;  // Relanzar otros errores para su manejo general
       }
     }
-    return responseBd;
   }
 
 //retorno de productos
@@ -37,7 +33,6 @@ async get(): Promise<productModel> {
   try {
     getResponseBd = await product.find()
     .populate("category")
-    .populate("size.color");
   } catch (error) {
     getResponseBd = {
       error: error,
@@ -54,7 +49,6 @@ async getBycode(codProduct: string) {
   try {
     getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(codProduct, "i") }})
     .populate("category")
-    .populate("size.color");
   } catch (error) {
     getBycodeResponseBd = {
       error: error,
@@ -69,7 +63,6 @@ async getByname(name: string) {
   try {
     getBynameResponseBd = await product.findOne({ name: { $regex : new RegExp(name, "i") }})
     .populate("category")
-    .populate("size.color");
   } catch (error) {
     getBynameResponseBd = {
       error: error,
@@ -84,7 +77,6 @@ async getByname(name: string) {
   let updateProductResponseBd: any = null;
   try {
     const filter = { codProduct: obj.codProductOriginal };
-    // console.log('veamos el filter papito',cod)
     updateProductResponseBd= await product.updateOne(filter, obj);
   } catch (error) {
     updateProductResponseBd = {

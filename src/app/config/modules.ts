@@ -101,7 +101,15 @@ import { UpdateTextileInventoryByIdUsecase } from "../domain/usecases/textileInv
 import { GetTextileInventoryByIdtUsecase } from "../domain/usecases/textileInventory/get-textileinventory-ById.usecase";
 import { DeleteTextileInventoryUsecase } from "../domain/usecases/textileInventory/delete-textileinventory-byId.usecase";
 
-
+//ORDERS
+import OrdersGateway from "../domain/models/orders/gateway/orders.gateway";
+import { OrderService } from "../infrastructure/driven-adapters/orders/orders.service";
+import { OrderController } from "../infrastructure/entry-points/orders/orders.controller";
+import { SaveOrderUsecase } from "../domain/usecases/orders/save-order.usecase";
+import { GetOrderUsecase } from "../domain/usecases/orders/get-order.usecase";
+import { GetOrderById } from "../domain/usecases/orders/get-orderById.usecase";
+import { UpdateOrderUsecase } from "../domain/usecases/orders/update-order.usecase";
+import { DeleteOrderUsecase } from "../domain/usecases/orders/delete-order.usecase";
 
 
 
@@ -204,4 +212,17 @@ container.bind<GetTextileInventoryBynameUsecase>("GetTextileInventoryBynameUseca
 container.bind<UpdateTextileInventoryByIdUsecase>("UpdateTextileInventoryByIdUsecase").to(UpdateTextileInventoryByIdUsecase);
 container.bind<GetTextileInventoryByIdtUsecase>("GetTextileInventoryByIdtUsecase").to(GetTextileInventoryByIdtUsecase);
 container.bind<DeleteTextileInventoryUsecase>("DeleteTextileInventoryUsecase").to(DeleteTextileInventoryUsecase);
+
+
+//Orders
+container.bind<OrdersGateway>("OrdersGateway").to(OrderService); 
+container.bind<OrderController>("OrderController").to(OrderController); 
+container.bind<SaveOrderUsecase>("SaveOrderUsecase").to(SaveOrderUsecase); 
+container.bind<GetOrderUsecase>("GetOrderUsecase").to(GetOrderUsecase);
+container.bind<GetOrderById>("GetOrderById").to(GetOrderById);  
+container.bind<UpdateOrderUsecase>("UpdateOrderUsecase").to(UpdateOrderUsecase);
+container.bind<DeleteOrderUsecase>("DeleteOrderUsecase").to(DeleteOrderUsecase );
+
+
+
 
