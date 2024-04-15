@@ -111,6 +111,17 @@ import { GetOrderById } from "../domain/usecases/orders/get-orderById.usecase";
 import { UpdateOrderUsecase } from "../domain/usecases/orders/update-order.usecase";
 import { DeleteOrderUsecase } from "../domain/usecases/orders/delete-order.usecase";
 
+//Cutting Planing 
+import CuttingGateway from "../domain/models/cuttingPlanning/gateway/cutting.gateway";
+import { CuttingService } from "../infrastructure/driven-adapters/cuttingPlanning/cutting.service";
+import { CuttingController } from '../infrastructure/entry-points/cuttingPlanning/cutting.controller';
+import { SaveCuttingUsecase } from "../domain/usecases/cuttingPlanning/save-cutting.usecase";
+import { GetCuttingUsecase } from "../domain/usecases/cuttingPlanning/get-cutting.usecase";
+import { GetCuttingById } from "../domain/usecases/cuttingPlanning/get-cuttingById.usecase";
+import { UpdateCuttingUsecase } from "../domain/usecases/cuttingPlanning/update-cutting.usecase";
+import { DeleteCuttingUsecase } from "../domain/usecases/cuttingPlanning/delete-cutting.usecase";
+
+
 
 
 export const container = new Container();
@@ -224,5 +235,11 @@ container.bind<UpdateOrderUsecase>("UpdateOrderUsecase").to(UpdateOrderUsecase);
 container.bind<DeleteOrderUsecase>("DeleteOrderUsecase").to(DeleteOrderUsecase );
 
 
-
-
+//cutting Plannig 
+container.bind<CuttingGateway>("CuttingGateway").to(CuttingService); 
+container.bind<CuttingController>("CuttingController").to(CuttingController); 
+container.bind<SaveCuttingUsecase>("SaveCuttingUsecase").to(SaveCuttingUsecase); 
+container.bind<GetCuttingUsecase>("GetCuttingUsecase").to(GetCuttingUsecase); 
+container.bind<GetCuttingById>("GetCuttingById").to(GetCuttingById); 
+container.bind<UpdateCuttingUsecase>("UpdateCuttingUsecase").to(UpdateCuttingUsecase);
+container.bind<DeleteCuttingUsecase>("DeleteCuttingUsecase").to(DeleteCuttingUsecase); 

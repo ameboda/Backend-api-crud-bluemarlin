@@ -16,11 +16,11 @@ import {
 } from "inversify-express-utils";
 
 
-import { SaveOrderUsecase } from "../../../domain/usecases/orders/save-order.usecase";
-import { GetOrderUsecase } from "../../../domain/usecases/orders/get-order.usecase";
-import { GetOrderById } from "../../../domain/usecases/orders/get-orderById.usecase";
-import { UpdateOrderUsecase } from "../../../domain/usecases/orders/update-order.usecase";
-import { DeleteOrderUsecase } from "../../../domain/usecases/orders/delete-order.usecase";
+import { SaveCuttingUsecase } from "../../../domain/usecases/cuttingPlanning/save-cutting.usecase";
+import { GetCuttingUsecase } from "../../../domain/usecases/cuttingPlanning/get-cutting.usecase";
+import { GetCuttingById } from "../../../domain/usecases/cuttingPlanning/get-cuttingById.usecase";
+import { UpdateCuttingUsecase } from "../../../domain/usecases/cuttingPlanning/update-cutting.usecase";
+import { DeleteCuttingUsecase } from "../../../domain/usecases/cuttingPlanning/delete-cutting.usecase";
 
 import { NotificationEnvelope } from "../../helper/notification/exceptions";
 import {
@@ -32,44 +32,45 @@ import {
     NOTIFICATION_STATUS_500,
 } from "../../helper/notification/exceptions.constants";
 import { orderModel } from "../../../domain/models/orders/orders.model"
+import { cuttingModel } from "../../../domain/models/cuttingPlanning/cuttingPlannigModel";
 
 
 
 
 
-@controller("/Order")
-export class OrderController implements interfaces.Controller {
+@controller("/Cutting")
+export class CuttingController implements interfaces.Controller {
 
     constructor(
-        @inject("SaveOrderUsecase")
-        private saveOrderUsecase: SaveOrderUsecase,
-        @inject("GetOrderUsecase")
-        private getOrderUsecase: GetOrderUsecase,
-        @inject("GetOrderById")
-        private getOrderById: GetOrderById,
-        @inject("UpdateOrderUsecase")
-        private  updateOrderUsecase:  UpdateOrderUsecase,
-        @inject("DeleteOrderUsecase")
-        private deleteOrderUsecase: DeleteOrderUsecase,
+        @inject("SaveCuttingUsecase")
+        private saveCuttingUsecase: SaveCuttingUsecase,
+        @inject("GetCuttingUsecase")
+        private getCuttingUsecase: GetCuttingUsecase,
+        @inject("GetCuttingById")
+        private getCuttingById: GetCuttingById,
+        @inject("UpdateCuttingUsecase")
+        private  updateCuttingUsecase:  UpdateCuttingUsecase,
+        @inject("DeleteCuttingUsecase")
+        private deleteCuttingUsecase: DeleteCuttingUsecase,
     ) { }
 
 
     // Crear Telas
 
     @httpPost("/")
-    async saveOrder(req: express.Request, res: express.Response) {
+    async saveCutting(req: express.Request, res: express.Response) {
         try {
-            const callUsecaseOrder = await this.saveOrderUsecase.invoke(
+            const callUsecaseCutting = await this.saveCuttingUsecase.invoke(
                 req.body,
             );
-            if (callUsecaseOrder.error) {
+            if (callUsecaseCutting.error) {
                 res
                     .status(NOTIFICATION_STATUS_422)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "Cutting",
                             NOTIFICATION_STATUS_422,
-                            callUsecaseOrder.error
+                            callUsecaseCutting.error
                         )
                     );
             } else {
@@ -77,9 +78,9 @@ export class OrderController implements interfaces.Controller {
                     .status(status.CREATED)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "Cutting",
                             NOTIFICATION_STATUS_201,
-                            callUsecaseOrder
+                            callUsecaseCutting
                         )
                     );
             }
@@ -87,24 +88,24 @@ export class OrderController implements interfaces.Controller {
             res
                 .status(status.INTERNAL_SERVER_ERROR)
                 .send(
-                    NotificationEnvelope.build("Order", NOTIFICATION_STATUS_500, error)
+                    NotificationEnvelope.build("Cutting", NOTIFICATION_STATUS_500, error)
                 );
         }
     }
 
 
-    // //  obtener listado de ordenes
+    // obtener listado de Corte
 
     @httpGet("/")
     async get(@response() res: express.Response) {
         try {
-            const getOrder = await this.getOrderUsecase.invoke();
+            const getOrder = await this.getCuttingUsecase.invoke();
             if (getOrder.error) {
                 res
                     .status(status.OK)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "Cutting",
                             NOTIFICATION_STATUS_400,
                             getOrder.error
                         )
@@ -114,7 +115,7 @@ export class OrderController implements interfaces.Controller {
                     .status(status.OK)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "Cutting",
                             NOTIFICATION_STATUS_200,
                             getOrder
                         )
@@ -124,26 +125,26 @@ export class OrderController implements interfaces.Controller {
             res
                 .status(status.INTERNAL_SERVER_ERROR)
                 .send(
-                    NotificationEnvelope.build("Order", NOTIFICATION_STATUS_500, error)
+                    NotificationEnvelope.build("Cutting", NOTIFICATION_STATUS_500, error)
                 );
         }
     }
 
-    // // // Obtener pedido por Id 
+//      Obtener Orden de Corte por Id 
 
-    @httpGet("/:idOrder")
-    async getById(@requestParam("idOrder") idOrder: number, @response() res: express.Response) {
+    @httpGet("/:idCutting")
+    async getById(@requestParam("idCutting") idCutting: number, @response() res: express.Response) {
         try {
-            const order = await this.getOrderById.invoke(idOrder);
+            const cutting= await this.getCuttingById.invoke(idCutting);
 
-            if (!order) {
+            if (!cutting) {
                 res
                     .status(status.NOT_FOUND)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "cutting",
                             NOTIFICATION_STATUS_404,
-                            "Pedido no encontrado"
+                            "Orden de corte no encontrado"
                         )
                     );
             } else {
@@ -151,9 +152,9 @@ export class OrderController implements interfaces.Controller {
                     .status(status.OK)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "cutting",
                             NOTIFICATION_STATUS_200,
-                            order
+                            cutting
                         )
                     );
             }
@@ -164,9 +165,9 @@ export class OrderController implements interfaces.Controller {
                     .status(status.BAD_REQUEST)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "cutting",
                             NOTIFICATION_STATUS_400,
-                            `El ID proporcionado no existe o no es válido: ${idOrder}`
+                            `El ID proporcionado no existe o no es válido: ${idCutting}`
                         )
                     );
             } else {
@@ -175,7 +176,7 @@ export class OrderController implements interfaces.Controller {
                     .status(status.INTERNAL_SERVER_ERROR)
                     .send(
                         NotificationEnvelope.build(
-                            "Order",
+                            "cutting",
                             NOTIFICATION_STATUS_500,
                             "Error interno del servidor"
                         )
@@ -187,73 +188,73 @@ export class OrderController implements interfaces.Controller {
     }
 
 
-   //    Actualizar Pedidos por Id
+//  Actualizar Pedidos por Id
         
         
-   @httpPut("/:idOrder")
+   @httpPut("/:idCutting")
    async updateById(
-     @requestParam("idOrder") idOrder: number,
+     @requestParam("idCutting") idCutting: number,
      @request() req: express.Request,
      @response() res: express.Response
    ) {
      try {
-       const updatedOrder = await this.updateOrderUsecase.invoke(idOrder, req.body as orderModel);
+       const updatedCutting = await this.updateCuttingUsecase.invoke(idCutting, req.body as cuttingModel);
  
-       if (updatedOrder) {
+       if (updatedCutting) {
          return res.status(status.OK).json({
-           message: "Pedido modificado con éxito",
-           data: updatedOrder,
+           message: "Orden de Corte modificado con éxito",
+           data: updatedCutting,
          });
        } else {
          return res.status(status.NOT_FOUND).json({ 
-             message: `Pedido con ID ${idOrder} no encontrado`
+             message: `Orden de Corte con ID ${idCutting} no encontrado`
          });
        }
      } catch (error) {
        
        return res.status(status.INTERNAL_SERVER_ERROR).json({
          status: NOTIFICATION_STATUS_500,
-         message: "Error actualizando  Pedido",
-         error: error.message, // Consider filtering sensitive information
+         message: "Error actualizando  la Orden de Corte",
+         error: error.message,
        });
      }
    }
 
-// borrar pedidos por IdOrder 
+//  borrar pedidos por Id Orden de Corte
 
-@httpDelete("/:idOrder") // Método delete del protocolo HTTP
+@httpDelete("/:idCutting") // Método delete del protocolo HTTP
 async deleteById(
-  @requestParam("idOrder") idOrder: number, 
+  @requestParam("idCutting") idCutting: number, 
   @response() res: express.Response
 ) {
   try {
-    const deletedOrder = await this.deleteOrderUsecase.invoke(idOrder);
+    const deletedCutting = await this.deleteCuttingUsecase.invoke(idCutting);
 
-    if (deletedOrder) {
+    if (deletedCutting) {
       return res.status(status.OK).send(
         NotificationEnvelope.build(
-          "Order",
+          "Cutting",
           NOTIFICATION_STATUS_200,
-          { message: "Pedido borrado con éxito" }
+          { message: "Orden de Corte borrado con éxito" }
         )
       );
     } else {
       return res.status(status.NOT_FOUND).send(
         NotificationEnvelope.build(
-          "Order",
+          "Cutting",
           NOTIFICATION_STATUS_404,
-          { message: `Pedido con ID ${idOrder} no encontrado` }
+          { message: `Orden de Corte con ID ${idCutting} no encontrado` }
         )
       );
     }
   } catch (error) {
-    console.error("Error borrando Pedido", error);
+    console.error("Error borrando Orden de Corte", error);
 
     switch (error.message) {
-      case "Pedido no encontrado":
+      case "Orden de Corte no encontrado":
         return res.status(status.NOT_FOUND).send(
           NotificationEnvelope.build(
-            "Order",
+            "Cutting",
             NOTIFICATION_STATUS_404,
             { message: error.message }
           )
@@ -261,7 +262,7 @@ async deleteById(
       case "Error de conexión a la base de datos":
         return res.status(status.INTERNAL_SERVER_ERROR).send(
           NotificationEnvelope.build(
-            "Order",
+            "Cutting",
             NOTIFICATION_STATUS_500,
             { message: "Error de conexión a la base de datos" }
           )
@@ -269,9 +270,9 @@ async deleteById(
       default:
         return res.status(status.INTERNAL_SERVER_ERROR).send(
           NotificationEnvelope.build(
-            "Order",
+            "Cutting",
             NOTIFICATION_STATUS_500,
-            { message: "Error borrando  Pedido" }
+            { message: "Error borrando  Orden de Corte" }
           )
         );
     }

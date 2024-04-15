@@ -1,4 +1,4 @@
-import { Document, model, Schema, SchemaType, Types } from "mongoose";
+import { Document, model, Schema, Types } from "mongoose";
 
 
 export interface textileInventoryModel extends Document {

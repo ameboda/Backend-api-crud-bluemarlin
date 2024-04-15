@@ -1,4 +1,4 @@
-import {Document, model, Schema, Types } from "mongoose";
+import {Document, model, Schema} from "mongoose";
 
 
 export interface counterModel extends Document {
@@ -20,4 +20,4 @@ const counterSchema = new Schema({
 const CounterModel= model<counterModel>("counter", counterSchema);
 
 
-export default CounterModel
+export default CounterModel; 

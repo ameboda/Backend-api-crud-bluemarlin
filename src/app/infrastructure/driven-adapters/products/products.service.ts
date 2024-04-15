@@ -33,6 +33,7 @@ async get(): Promise<productModel> {
   try {
     getResponseBd = await product.find()
     .populate("category")
+    .populate("colors");
   } catch (error) {
     getResponseBd = {
       error: error,
@@ -49,6 +50,7 @@ async getBycode(codProduct: string) {
   try {
     getBycodeResponseBd = await product.findOne({ codProduct: { $regex : new RegExp(codProduct, "i") }})
     .populate("category")
+    .populate("colors"); 
   } catch (error) {
     getBycodeResponseBd = {
       error: error,
@@ -63,6 +65,7 @@ async getByname(name: string) {
   try {
     getBynameResponseBd = await product.findOne({ name: { $regex : new RegExp(name, "i") }})
     .populate("category")
+    .populate("colors")
   } catch (error) {
     getBynameResponseBd = {
       error: error,

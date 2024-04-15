@@ -11,6 +11,8 @@ export interface productModel extends Document {
     nameLetter: string;
     nameNumber: number;
   }[];
+  colors: Types.ObjectId
+
   creationdate: Date;
 }
 
@@ -39,7 +41,10 @@ const productSchema = new Schema({
     ],
     default: [], // Define un valor inicial para el array como vacío
   },
-
+  colors:{
+    type: Schema.Types.ObjectId,
+    ref: "colors"
+  },
   creationdate: {
     type: Date,
     default: Date.now,

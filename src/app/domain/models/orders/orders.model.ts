@@ -1,5 +1,5 @@
 import  {Decimal128, Document, model, Schema, Types } from "mongoose";
-import CounterModel from "./gateway/counter.model";
+import CounterModel from "./counter.model";
 
 
 
@@ -86,7 +86,7 @@ const orderSchema = new Schema({
 
 
 
-// Pre-save hook para el autoincremento del idOrder 
+// autoincremento del idOrder 
 orderSchema.pre('save', async function (this: orderModel, next) {
   if (this.isNew) {
     const counter = await CounterModel.findOneAndUpdate(
@@ -99,8 +99,6 @@ orderSchema.pre('save', async function (this: orderModel, next) {
   }
   next();
 });
-
-
 
 
 
