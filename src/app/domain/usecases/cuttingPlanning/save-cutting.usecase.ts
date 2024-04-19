@@ -10,11 +10,12 @@ export class SaveCuttingUsecase {
 
   async invoke(param: cuttingModel): Promise<cuttingModel> {
 
-    // calcular  usablepieces
+    // calculate  usablepieces
     param.usablepieces= param.metersdelivered-param.metersCutting; 
 
-    //calcular promedio real
+    //calculate realaverage
     // param.realAverage= param.metersCutting/param.cantidadTotalPrendas;
+    //organizar con capas 
 
     return await this.cuttingGateway.save(param); 
 

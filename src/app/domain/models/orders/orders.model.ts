@@ -1,9 +1,10 @@
-import  {Decimal128, Document, model, Schema, Types } from "mongoose";
+import  {Decimal128, Document, model, Number, Schema, Types } from "mongoose";
 import CounterModel from "./counter.model";
 
 
 
 export interface orderModel extends Document {
+  param: any;
   [X: string]: any;
   error: any;
   _id: Types.ObjectId; 
@@ -15,9 +16,9 @@ export interface orderModel extends Document {
   Sellers: Types.ObjectId;
 //   products: Types.ObjectId; 
   observations: string; 
-  subtotal: Decimal128; 
+  subtotal: number; 
   iva: number; 
-  total: Decimal128;   
+  total: number;   
   creationdate: Date;
 }
 
@@ -64,7 +65,7 @@ const orderSchema = new Schema({
   },
 
   subtotal: {
-    type: Schema.Types.Decimal128,
+    type: Number,
     required: true
   }, 
 
@@ -74,7 +75,7 @@ const orderSchema = new Schema({
   },
 
   total: {
-    type: Schema.Types.Decimal128,
+    type: Number,
     required: true
   }, 
   

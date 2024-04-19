@@ -42,7 +42,7 @@ const cuttingSchema = new Schema({
     },
     products: [{
         type: Schema.Types.ObjectId,
-        ref: "Products",
+        ref: "Products", //id productos 
     }],
     Markerdetails: {
         size: {
@@ -83,7 +83,7 @@ const cuttingSchema = new Schema({
 }); 
 
 
-// autoincremento del idOrder 
+// autoincremento del idcutting 
 cuttingSchema.pre('save', async function (this: cuttingModel, next) {
     if (this.isNew) {
       const countercutting = await CountercuttingModel.findOneAndUpdate(
