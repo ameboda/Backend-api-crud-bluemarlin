@@ -43,7 +43,6 @@ export class CuttingService extends CuttingGateway {
       getResponseBd = await cutting.find()
       .populate("order")
       .populate("inventorytextile")
-      .populate('products', 'size');  
     } catch (error) {
       getResponseBd = {
         error: error,
@@ -59,8 +58,7 @@ async getById(idCutting: number): Promise<cuttingModel> {
   try {
     const cutting = await CuttingModel.findOne({ idCutting }) 
     .populate("order")
-    .populate("inventorytextile")
-    .populate('products', 'size');  
+    .populate("inventorytextile") 
 
     if (!cutting) {
       throw new Error('Orden de Corte no encontrada');      

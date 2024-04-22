@@ -1,6 +1,8 @@
 
 import { Decimal128, Document, model, Schema, Types } from "mongoose";
 import CountercuttingModel from "./countercuttingModel";
+import { error } from "console";
+import { setUncaughtExceptionCaptureCallback } from "process";
 
 
 
@@ -12,7 +14,6 @@ export interface cuttingModel extends Document {
     idCutting: number;
     order: Types.ObjectId;
     inventorytextile: Types.ObjectId;
-    products: Types.ObjectId;
     Markerdetails: {
         size: string,
         marklength: Decimal128,
@@ -24,6 +25,7 @@ export interface cuttingModel extends Document {
     usablepieces: number;
     unusablepieces: number;
     realAverage: number;
+    averageQuoted: number;  
 
 }
 
@@ -40,10 +42,6 @@ const cuttingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "inventorytextile"
     },
-    products: [{
-        type: Schema.Types.ObjectId,
-        ref: "Products", //id productos 
-    }],
     Markerdetails: {
         size: {
             type: [
@@ -79,6 +77,10 @@ const cuttingSchema = new Schema({
     realAverage:{
         type: Number,
          
+    },
+    averageQuoted: {
+        type: Number,
+        required: true
     }
 }); 
 
@@ -100,4 +102,3 @@ cuttingSchema.pre('save', async function (this: cuttingModel, next) {
 
 const CuttingModel = model<cuttingModel>("cutting", cuttingSchema);
 export default CuttingModel;
-

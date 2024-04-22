@@ -14,9 +14,8 @@ export class SaveCuttingUsecase {
     param.usablepieces= param.metersdelivered-param.metersCutting; 
 
     //calculate realaverage
-    // param.realAverage= param.metersCutting/param.cantidadTotalPrendas;
-    //organizar con capas 
-
+    param.realAverage= param.metersCutting/param.Markerdetails.layers;
+    
     return await this.cuttingGateway.save(param); 
 
 
