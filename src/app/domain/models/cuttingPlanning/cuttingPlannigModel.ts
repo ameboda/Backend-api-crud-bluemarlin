@@ -1,8 +1,6 @@
 
 import { Decimal128, Document, model, Schema, Types } from "mongoose";
 import CountercuttingModel from "./countercuttingModel";
-import { error } from "console";
-import { setUncaughtExceptionCaptureCallback } from "process";
 
 
 

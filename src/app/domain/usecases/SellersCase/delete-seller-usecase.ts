@@ -1,6 +1,9 @@
 import { inject, injectable } from "inversify";
 import { sellersModel } from "../../models/sellers/sellers.model";
 import SellerGateway from "../../models/sellers/gateway/sellers.gateway";
+import { error } from "console";
+import { EntityPropertyNotFoundError } from "typeorm";
+import { Document } from 'mongoose';
 
 @injectable()
 export class DeleteSellerUsecase {
@@ -9,9 +12,7 @@ export class DeleteSellerUsecase {
   ) {}
 
   async invoke(param: number): Promise<any> { // Especifica el tipo de parámetro y el tipo de retorno
-    let responseSellerUseCase: any;
-
-    
+    let responseSellerUseCase: any;   
     // logica de borrado '
     try {
       //1. se trae el vendedor de la base de datos 
